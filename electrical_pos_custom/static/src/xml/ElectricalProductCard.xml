@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         ElectricalProductCard Template
+         Extended product card for POS product list
+         Shows: name, price, brand, watt, voltage, shelf, stock badge
+         ================================================================ -->
+
+    <t t-name="electrical_pos_custom.ElectricalProductCard">
+        <div t-att-class="'electrical-product-card ' + (isOutOfStock ? 'opacity-50' : '')"
+             style="position:relative; background:#fff; border:1px solid #dee2e6; border-radius:10px; overflow:hidden; cursor:pointer;"
+             t-on-click="onCardClick"
+             dir="rtl">
+
+            <!-- ============================================================
+                 Stock Badge (top-left)
+                 ============================================================ -->
+            <div t-if="props.showStock"
+                 t-att-class="stockBadgeClass">
+                <t t-esc="stockBadgeLabel"/>
+            </div>
+
+            <!-- ============================================================
+                 Action Buttons (top-right)
+                 ============================================================ -->
+            <div style="
+                position:absolute;
+                top:6px;
+                right:6px;
+                display:flex;
+                flex-direction:column;
+                gap:4px;
+                z-index:2;
+            ">
+
+                <!-- Info Button -->
+                <button class="btn btn-sm btn-light"
+                        style="
+                            width:24px;
+                            height:24px;
+                            padding:0;
+                            font-size:10px;
+                            border-radius:50%;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            box-shadow:0 1px 3px rgba(0,0,0,0.15);
+                        "
+                        t-on-click="onInfoClick"
+                        title="معلومات المنتج">
+                    <i class="fa fa-info" style="color:#0d6efd;"/>
+                </button>
+
+                <!-- Packaging Button -->
+                <button t-if="hasPackaging"
+                        class="btn btn-sm btn-light"
+                        style="
+                            width:24px;
+                            height:24px;
+                            padding:0;
+                            font-size:10px;
+                            border-radius:50%;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            box-shadow:0 1px 3px rgba(0,0,0,0.15);
+                        "
+                        t-on-click="onPackClick"
+                        title="اختر وحدة التعبئة">
+                    <i class="fa fa-th-large" style="color:#fd7e14;"/>
+                </button>
+
+            </div>
+
+            <!-- ============================================================
+                 Product Image
+                 ============================================================ -->
+            <div style="
+                width:100%;
+                height:90px;
+                overflow:hidden;
+                background:#f8f9fa;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            ">
+                <img t-att-src="imageUrl"
+                     style="
+                        max-width:100%;
+                        max-height:90px;
+                        object-fit:contain;
+                     "
+                     loading="lazy"
+                     onerror="this.src='/web/static/img/placeholder.png'"/>
+            </div>
+
+            <!-- ============================================================
+                 Card Body
+                 ============================================================ -->
+            <div class="card-body" style="padding:8px;">
+
+                <!-- Product Name -->
+                <div class="product-name"
+                     style="
+                        font-size:12px;
+                        font-weight:600;
+                        line-height:1.3;
+                        margin-bottom:3px;
+                        color:#212529;
+                        direction:rtl;
+                        display:-webkit-box;
+                        -webkit-line-clamp:2;
+                        -webkit-box-orient:vertical;
+                        overflow:hidden;
+                     ">
+                    <t t-esc="productName"/>
+                </div>
+
+                <!-- Internal Reference -->
+                <div t-if="props.product.default_code"
+                     style="font-size:10px; color:#adb5bd; margin-bottom:3px; direction:ltr; text-align:right;">
+                    <t t-esc="props.product.default_code"/>
+                </div>
+
+                <!-- Brand -->
+                <div t-if="props.showElecInfo and brandName"
+                     class="product-brand">
+                    <i class="fa fa-trademark me-1"/>
+                    <t t-esc="brandName"/>
+                </div>
+
+                <!-- Watt + Voltage Row -->
+                <div t-if="props.showElecInfo and (wattLabel or voltageLabel)"
+                     style="display:flex; gap:6px; margin-top:3px; flex-wrap:wrap;">
+                    <span t-if="wattLabel"
+                          class="product-watt">
+                        <i class="fa fa-bolt me-1"/>
+                        <t t-esc="wattLabel"/>
+                    </span>
+                    <span t-if="voltageLabel"
+                          style="font-size:10px; color:#6c757d;">
+                        <t t-esc="voltageLabel"/>
+                    </span>
+                </div>
+
+                <!-- Shelf Location -->
+                <div t-if="props.showElecInfo and shelfLabel"
+                     class="product-shelf"
+                     style="margin-top:3px;">
+                    <i class="fa fa-map-marker me-1"/>
+                    <t t-esc="shelfLabel"/>
+                </div>
+
+                <!-- Price Row -->
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-top:6px;
+                    padding-top:6px;
+                    border-top:1px solid #f0f0f0;
+                ">
+                    <span class="product-price">
+                        <t t-esc="productPrice"/>
+                    </span>
+
+                    <!-- Packaging indicator -->
+                    <span t-if="hasPackaging"
+                          style="
+                            font-size:10px;
+                            color:#fd7e14;
+                            background:#fff3e0;
+                            padding:1px 5px;
+                            border-radius:4px;
+                          "
+                          title="يتوفر بوحدات تعبئة متعددة">
+                        <i class="fa fa-th-large"/>
+                    </span>
+                </div>
+
+                <!-- Out of Stock Overlay Label -->
+                <div t-if="isOutOfStock"
+                     style="
+                        margin-top:4px;
+                        padding:3px;
+                        background:#f8d7da;
+                        border-radius:4px;
+                        font-size:11px;
+                        font-weight:700;
+                        color:#dc3545;
+                        text-align:center;
+                     ">
+                    نفذ من المخزن
+                </div>
+
+            </div>
+
+        </div>
+    </t>
+
+</templates>

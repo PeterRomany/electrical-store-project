@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Extend Partner Form — Add Credit Control Tab
+         ================================================================ -->
+
+    <record id="view_res_partner_form_credit" model="ir.ui.view">
+        <field name="name">res.partner.form.credit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Stat Buttons -->
+            <div name="button_box" position="inside">
+
+                <!-- Credit Used Button -->
+                <button class="oe_stat_button"
+                        icon="fa-credit-card"
+                        attrs="{
+                            'invisible': [
+                                '|',
+                                ('customer_rank', '=', 0),
+                                ('credit_limit', '=', 0)
+                            ]
+                        }"
+                        groups="electrical_store_base.group_electrical_accountant,
+                                electrical_store_base.group_electrical_manager">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="credit_used" widget="monetary"/>
+                        </span>
+                        <span class="o_stat_text">
+                            Credit Used / مستخدم
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Credit Available Button -->
+                <button class="oe_stat_button"
+                        icon="fa-check-circle"
+                        attrs="{
+                            'invisible': [
+                                '|',
+                                ('customer_rank', '=', 0),
+                                ('credit_limit', '=', 0)
+                            ]
+                        }"
+                        groups="electrical_store_base.group_electrical_accountant,
+                                electrical_store_base.group_electrical_manager">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="credit_available" widget="monetary"/>
+                        </span>
+                        <span class="o_stat_text">
+                            Available / متاح
+                        </span>
+                    </div>
+                </button>
+
+            </div>
+
+            <!-- Credit Status Banner — shown below partner name -->
+            <field name="customer_rank" position="after">
+
+                <!-- Blocked Banner -->
+                <div class="alert alert-danger mb-1 py-1 px-2"
+                     role="alert"
+                     style="direction:rtl; font-size:13px;"
+                     attrs="{
+                         'invisible': [
+                             '|',
+                             ('credit_status', '!=', 'blocked'),
+                             ('customer_rank', '=', 0)
+                         ]
+                     }">
+                    🚫 <strong>محظور — Blocked:</strong>
+                    هذا العميل تجاوز الحد الائتماني.
+                    <field name="credit_status" invisible="1"/>
+                </div>
+
+                <!-- Warning Banner -->
+                <div class="alert alert-warning mb-1 py-1 px-2"
+                     role="alert"
+                     style="direction:rtl; font-size:13px;"
+                     attrs="{
+                         'invisible': [
+                             '|',
+                             ('credit_status', '!=', 'warning'),
+                             ('customer_rank', '=', 0)
+                         ]
+                     }">
+                    ⚠️ <strong>تحذير — Warning:</strong>
+                    هذا العميل اقترب من الحد الائتماني.
+                </div>
+
+            </field>
+
+            <!-- Credit Control Tab -->
+            <page name="sales_purchases" position="after">
+                <page string="Credit Control / الائتمان"
+                      name="credit_control"
+                      attrs="{'invisible': [('customer_rank', '=', 0)]}"
+                      groups="electrical_store_base.group_electrical_accountant,
+                              electrical_store_base.group_electrical_manager">
+
+                    <group>
+
+                        <!-- Left: Credit Settings -->
+                        <group string="Credit Settings / إعدادات الائتمان">
+                            <field name="credit_limit"/>
+                            <field name="warning_threshold"
+                                   attrs="{'invisible': [('credit_limit', '=', 0)]}"/>
+                            <field name="blocking_threshold"
+                                   attrs="{'invisible': [('credit_limit', '=', 0)]}"/>
+                        </group>
+
+                        <!-- Right: Current Status -->
+                        <group string="Current Status / الوضع الحالي"
+                               attrs="{'invisible': [('credit_limit', '=', 0)]}">
+                            <field name="credit_used"
+                                   readonly="1"
+                                   widget="monetary"/>
+                            <field name="credit_available"
+                                   readonly="1"
+                                   widget="monetary"/>
+                            <field name="credit_usage_pct"
+                                   readonly="1"
+                                   string="Usage (%) / نسبة الاستخدام"/>
+                            <field name="credit_status"
+                                   readonly="1"
+                                   decoration-danger="credit_status == 'blocked'"
+                                   decoration-warning="credit_status == 'warning'"
+                                   decoration-success="credit_status == 'ok'"/>
+                        </group>
+
+                    </group>
+
+                    <!-- No Credit Limit Notice -->
+                    <div class="alert alert-info"
+                         role="alert"
+                         style="direction:rtl;"
+                         attrs="{'invisible': [('credit_limit', '!=', 0)]}">
+                        <i class="fa fa-info-circle me-2"/>
+                        الحد الائتماني = 0 يعني لا يوجد حد محدد لهذا العميل (غير محدود).
+                        <br/>
+                        <small>Credit Limit = 0 means no limit is set for this customer (unlimited).</small>
+                    </div>
+
+                </page>
+            </page>
+
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Extend Partner List — Add Credit Status Column
+         ================================================================ -->
+
+    <record id="view_res_partner_list_credit" model="ir.ui.view">
+        <field name="name">res.partner.list.credit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+
+            <field name="customer_type" position="after">
+                <field name="credit_status"
+                       string="Credit / الائتمان"
+                       optional="show"
+                       decoration-danger="credit_status == 'blocked'"
+                       decoration-warning="credit_status == 'warning'"
+                       decoration-success="credit_status == 'ok'"
+                       groups="electrical_store_base.group_electrical_accountant,
+                               electrical_store_base.group_electrical_manager"/>
+                <field name="credit_limit"
+                       string="Limit / الحد"
+                       optional="hide"
+                       widget="monetary"
+                       groups="electrical_store_base.group_electrical_accountant,
+                               electrical_store_base.group_electrical_manager"/>
+                <field name="credit_used"
+                       string="Used / المستخدم"
+                       optional="hide"
+                       widget="monetary"
+                       groups="electrical_store_base.group_electrical_accountant,
+                               electrical_store_base.group_electrical_manager"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Extend Partner Search — Add Credit Status Filters
+         ================================================================ -->
+
+    <record id="view_res_partner_search_credit" model="ir.ui.view">
+        <field name="name">res.partner.search.credit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+
+            <filter name="filter_type_company" position="after">
+                <separator/>
+                <filter name="filter_credit_ok"
+                        string="Credit OK / الائتمان جيد"
+                        domain="[('credit_status', '=', 'ok')]"
+                        groups="electrical_store_base.group_electrical_accountant,
+                                electrical_store_base.group_electrical_manager"/>
+                <filter name="filter_credit_warning"
+                        string="Credit Warning / تحذير ائتماني"
+                        domain="[('credit_status', '=', 'warning')]"
+                        groups="electrical_store_base.group_electrical_accountant,
+                                electrical_store_base.group_electrical_manager"/>
+                <filter name="filter_credit_blocked"
+                        string="Credit Blocked / محظور"
+                        domain="[('credit_status', '=', 'blocked')]"
+                        groups="electrical_store_base.group_electrical_accountant,
+                                electrical_store_base.group_electrical_manager"/>
+                <filter name="filter_has_credit_limit"
+                        string="Has Credit Limit / له حد ائتماني"
+                        domain="[('credit_limit', '>', 0)]"
+                        groups="electrical_store_base.group_electrical_accountant,
+                                electrical_store_base.group_electrical_manager"/>
+            </filter>
+
+            <group expand="0" string="Group By" position="inside">
+                <filter name="group_by_credit_status"
+                        string="Credit Status / حالة الائتمان"
+                        context="{'group_by': 'credit_status'}"
+                        groups="electrical_store_base.group_electrical_accountant,
+                                electrical_store_base.group_electrical_manager"/>
+            </group>
+
+        </field>
+    </record>
+
+</odoo>

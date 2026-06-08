@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         List View
+         ================================================================ -->
+
+    <record id="view_electrical_brand_list" model="ir.ui.view">
+        <field name="name">electrical.brand.list</field>
+        <field name="model">electrical.brand</field>
+        <field name="arch" type="xml">
+            <list string="Brands / الماركات"
+                  decoration-muted="active == False">
+                <field name="name"/>
+                <field name="name_arabic"/>
+                <field name="country_of_origin"/>
+                <field name="product_count" string="Products"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Form View
+         ================================================================ -->
+
+    <record id="view_electrical_brand_form" model="ir.ui.view">
+        <field name="name">electrical.brand.form</field>
+        <field name="model">electrical.brand</field>
+        <field name="arch" type="xml">
+            <form string="Brand / الماركة">
+                <sheet>
+
+                    <!-- Stat Button -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_products"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-cube"
+                                groups="electrical_store_base.group_electrical_storekeeper,
+                                        electrical_store_base.group_electrical_manager">
+                            <field name="product_count"
+                                   widget="statinfo"
+                                   string="Products"/>
+                        </button>
+                    </div>
+
+                    <!-- Archive toggle -->
+                    <widget name="web_ribbon"
+                            title="Archived"
+                            bg_color="text-bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+
+                    <field name="active" invisible="1"/>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"
+                                   placeholder="Brand Name / اسم الماركة"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Details / التفاصيل">
+                            <field name="name_arabic"/>
+                            <field name="country_of_origin"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Notes / ملاحظات" name="notes">
+                            <field name="notes"
+                                   placeholder="Internal notes about this brand..."/>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Search View
+         ================================================================ -->
+
+    <record id="view_electrical_brand_search" model="ir.ui.view">
+        <field name="name">electrical.brand.search</field>
+        <field name="model">electrical.brand</field>
+        <field name="arch" type="xml">
+            <search string="Search Brands / بحث الماركات">
+
+                <field name="name"
+                       string="Brand"
+                       filter_domain="[
+                           '|',
+                           ('name', 'ilike', self),
+                           ('name_arabic', 'ilike', self)
+                       ]"/>
+                <field name="country_of_origin"/>
+
+                <separator/>
+
+                <filter name="filter_active"
+                        string="Active / نشط"
+                        domain="[('active', '=', True)]"/>
+                <filter name="filter_archived"
+                        string="Archived / مؤرشف"
+                        domain="[('active', '=', False)]"/>
+
+                <group expand="0" string="Group By / تجميع حسب">
+                    <filter name="group_by_country"
+                            string="Country of Origin"
+                            context="{'group_by': 'country_of_origin'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Action
+         ================================================================ -->
+
+    <record id="action_electrical_brand" model="ir.actions.act_window">
+        <field name="name">Brands / الماركات</field>
+        <field name="res_model">electrical.brand</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_electrical_brand_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first brand!
+            </p>
+            <p>
+                Add electrical product brands to categorize
+                your inventory by manufacturer.
+            </p>
+        </field>
+    </record>
+
+</odoo>

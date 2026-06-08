@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         ProductInfoPopup Template
+         Shows full electrical product details in POS
+         ================================================================ -->
+
+    <t t-name="electrical_pos_custom.ProductInfoPopup">
+        <div class="product-info-popup popup" dir="rtl">
+
+            <!-- ============================================================
+                 Header
+                 ============================================================ -->
+            <div class="product-info-popup popup-header">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>
+                        <i class="fa fa-info-circle me-2"/>
+                        معلومات المنتج
+                    </span>
+                    <button class="btn btn-sm btn-outline-light"
+                            t-on-click="cancel">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 Body
+                 ============================================================ -->
+            <div class="product-info-popup popup-body">
+
+                <!-- Loading State -->
+                <div t-if="state.loading"
+                     style="text-align:center; padding: 32px; color:#6c757d;">
+                    <i class="fa fa-spinner fa-spin fa-2x mb-3"
+                       style="display:block;"/>
+                    <div>جاري تحميل معلومات المنتج...</div>
+                </div>
+
+                <t t-else="">
+
+                    
+                         <!-- Product Header: Name + Code + Barcode -->
+                        
+                    <div style="
+                        background: #f8f9fa;
+                        border-radius: 8px;
+                        padding: 12px;
+                        margin-bottom: 12px;
+                        border-right: 4px solid #0d6efd;
+                    ">
+                        <div style="font-size:16px; font-weight:700; color:#212529; margin-bottom:4px;">
+                            <t t-esc="productName"/>
+                        </div>
+                        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                            <span t-if="productCode"
+                                  style="font-size:12px; color:#6c757d;">
+                                <i class="fa fa-hashtag me-1"/>
+                                <t t-esc="productCode"/>
+                            </span>
+                            <span t-if="productBarcode"
+                                  style="font-size:12px; color:#6c757d;">
+                                <i class="fa fa-barcode me-1"/>
+                                <t t-esc="productBarcode"/>
+                            </span>
+                        </div>
+                    </div>
+
+                         <!-- Stock Status -->
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fa fa-cubes me-1"/>
+                            المخزون المتاح
+                        </span>
+                        <span t-att-class="'stock-badge ' + stockStatusClass">
+                            <t t-esc="stockLabel"/>
+                        </span>
+                    </div>
+
+                   
+                         <!-- Price -->
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fa fa-tag me-1"/>
+                            السعر
+                        </span>
+                        <span class="info-value" style="color:#198754; font-size:15px;">
+                            <t t-esc="productPrice"/>
+                        </span>
+                    </div>
+
+                         <!-- Electrical Specifications -->
+                    <div t-if="brand" class="info-row">
+                        <span class="info-label">
+                            <i class="fa fa-trademark me-1"/>
+                            الماركة
+                        </span>
+                        <span class="info-value">
+                            <t t-esc="brand"/>
+                        </span>
+                    </div>
+
+                    <div t-if="watt" class="info-row">
+                        <span class="info-label">
+                            <i class="fa fa-bolt me-1"/>
+                            الواط
+                        </span>
+                        <span class="info-value" style="color:#fd7e14;">
+                            <t t-esc="watt"/>
+                        </span>
+                    </div>
+
+                    <div t-if="voltage" class="info-row">
+                        <span class="info-label">
+                            <i class="fa fa-plug me-1"/>
+                            الجهد
+                        </span>
+                        <span class="info-value">
+                            <t t-esc="voltage"/>
+                        </span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fa fa-shield me-1"/>
+                            الضمان
+                        </span>
+                        <span class="info-value">
+                            <t t-esc="warrantyLabel"/>
+                        </span>
+                    </div>
+
+                    <div t-if="shelfLocation" class="info-row">
+                        <span class="info-label">
+                            <i class="fa fa-map-marker me-1"/>
+                            موقع الرف
+                        </span>
+                        <span class="info-value" style="color:#0dcaf0;">
+                            <t t-esc="shelfLocation"/>
+                        </span>
+                    </div>
+
+                    <div t-if="productAlias" class="info-row">
+                        <span class="info-label">
+                            <i class="fa fa-font me-1"/>
+                            الاسم الشائع
+                        </span>
+                        <span class="info-value">
+                            <t t-esc="productAlias"/>
+                        </span>
+                    </div>
+
+                         <!-- Packaging Options -->
+                    <div t-if="hasPackaging"
+                         style="margin-top:12px;">
+                        <div style="
+                            font-size:12px;
+                            font-weight:700;
+                            color:#495057;
+                            margin-bottom:8px;
+                            padding-bottom:4px;
+                            border-bottom:1px solid #dee2e6;
+                        ">
+                            <i class="fa fa-th-large me-1"/>
+                            وحدات التعبئة المتاحة
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <t t-foreach="packagingList" t-as="pack" t-key="pack.id">
+                                <div style="
+                                    padding: 6px 12px;
+                                    border: 1px solid #dee2e6;
+                                    border-radius: 6px;
+                                    font-size: 12px;
+                                    background: #f8f9fa;
+                                    cursor: pointer;
+                                "
+                                t-on-click="() => this.selectPackaging(pack)">
+                                    <div style="font-weight:700;">
+                                        <t t-esc="pack.display_name || pack.name"/>
+                                    </div>
+                                    <div style="color:#6c757d; font-size:10px;">
+                                        <t t-if="!pack.is_base">
+                                            = <t t-esc="pack.qty"/> قطعة
+                                        </t>
+                                        <t t-else="">
+                                            وحدة أساسية
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                         <!-- Error Message -->
+                    <div t-if="state.error"
+                         style="
+                            margin-top:8px;
+                            font-size:11px;
+                            color:#6c757d;
+                            text-align:center;
+                         ">
+                        <i class="fa fa-exclamation-circle me-1"/>
+                        <t t-esc="state.error"/>
+                    </div>
+
+                </t>
+            </div>
+
+            <!-- ============================================================
+                 Footer Actions
+                 ============================================================ -->
+            <div class="popup-footer"
+                 style="
+                    padding: 12px 18px;
+                    border-top: 1px solid #dee2e6;
+                    display: flex;
+                    gap: 10px;
+                    justify-content: flex-start;
+                    direction: rtl;
+                 ">
+                <button class="btn btn-primary"
+                        t-on-click="confirm"
+                        style="min-width:120px;">
+                    <i class="fa fa-plus me-2"/>
+                    إضافة للطلب
+                </button>
+                <button class="btn btn-outline-secondary"
+                        t-on-click="cancel">
+                    <i class="fa fa-times me-2"/>
+                    إغلاق
+                </button>
+            </div>
+
+        </div>
+    </t>
+
+</templates>

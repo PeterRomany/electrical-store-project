@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Customer Statement PDF Report Action
+         ================================================================ -->
+
+    <record id="action_report_customer_statement" model="ir.actions.report">
+        <field name="name">Customer Account Statement / كشف حساب العميل</field>
+        <field name="model">customer.statement.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">
+            customer_statement.report_customer_statement_template
+        </field>
+        <field name="report_file">
+            customer_statement.report_customer_statement_template
+        </field>
+        <field name="print_report_name">
+            'Statement_%s_%s_%s' % (
+                object.partner_id.name,
+                object.date_from,
+                object.date_to
+            )
+        </field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+        <field name="groups_id" eval="[
+            (4, ref('electrical_store_base.group_electrical_accountant')),
+            (4, ref('electrical_store_base.group_electrical_manager')),
+        ]"/>
+    </record>
+
+</odoo>

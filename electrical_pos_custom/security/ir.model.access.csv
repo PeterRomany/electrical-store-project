@@ -1,0 +1,29 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+<!-- pos.config — electrical settings readable by all POS users -->
+access_pos_config_cashier,pos.config cashier,point_of_sale.model_pos_config,electrical_store_base.group_electrical_cashier,1,0,0,0
+access_pos_config_storekeeper,pos.config storekeeper,point_of_sale.model_pos_config,electrical_store_base.group_electrical_storekeeper,1,0,0,0
+access_pos_config_accountant,pos.config accountant,point_of_sale.model_pos_config,electrical_store_base.group_electrical_accountant,1,0,0,0
+access_pos_config_manager,pos.config manager,point_of_sale.model_pos_config,electrical_store_base.group_electrical_manager,1,1,1,1
+
+<!-- pos.session -->
+access_pos_session_cashier,pos.session cashier,point_of_sale.model_pos_session,electrical_store_base.group_electrical_cashier,1,1,1,0
+access_pos_session_manager,pos.session manager,point_of_sale.model_pos_session,electrical_store_base.group_electrical_manager,1,1,1,1
+
+<!-- pos.order -->
+access_pos_order_cashier,pos.order cashier,point_of_sale.model_pos_order,electrical_store_base.group_electrical_cashier,1,1,1,0
+access_pos_order_storekeeper,pos.order storekeeper,point_of_sale.model_pos_order,electrical_store_base.group_electrical_storekeeper,1,0,0,0
+access_pos_order_accountant,pos.order accountant,point_of_sale.model_pos_order,electrical_store_base.group_electrical_accountant,1,0,0,0
+access_pos_order_manager,pos.order manager,point_of_sale.model_pos_order,electrical_store_base.group_electrical_manager,1,1,1,1
+
+<!-- pos.order.line -->
+access_pos_order_line_cashier,pos.order.line cashier,point_of_sale.model_pos_order_line,electrical_store_base.group_electrical_cashier,1,1,1,0
+access_pos_order_line_manager,pos.order.line manager,point_of_sale.model_pos_order_line,electrical_store_base.group_electrical_manager,1,1,1,1
+
+<!-- pos.payment -->
+access_pos_payment_cashier,pos.payment cashier,point_of_sale.model_pos_payment,electrical_store_base.group_electrical_cashier,1,1,1,0
+access_pos_payment_manager,pos.payment manager,point_of_sale.model_pos_payment,electrical_store_base.group_electrical_manager,1,1,1,1
+
+<!-- pos.payment.method -->
+access_pos_payment_method_cashier,pos.payment.method cashier,point_of_sale.model_pos_payment_method,electrical_store_base.group_electrical_cashier,1,0,0,0
+access_pos_payment_method_manager,pos.payment.method manager,point_of_sale.model_pos_payment_method,electrical_store_base.group_electrical_manager,1,1,1,1

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Damage Reason List View
+         ================================================================ -->
+
+    <record id="view_damage_reason_list" model="ir.ui.view">
+        <field name="name">damage.reason.list</field>
+        <field name="model">damage.reason</field>
+        <field name="arch" type="xml">
+            <list string="Damage Reasons / أسباب التلف"
+                  decoration-muted="active == False">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="name_arabic"/>
+                <field name="scrap_count"
+                       string="Operations"
+                       optional="show"/>
+                <field name="scrap_value"
+                       string="Total Value"
+                       widget="monetary"
+                       optional="show"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Damage Reason Form View
+         ================================================================ -->
+
+    <record id="view_damage_reason_form" model="ir.ui.view">
+        <field name="name">damage.reason.form</field>
+        <field name="model">damage.reason</field>
+        <field name="arch" type="xml">
+            <form string="Damage Reason / سبب التلف">
+                <sheet>
+
+                    <!-- Stat Buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_scraps"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-trash"
+                                groups="electrical_store_base.group_electrical_storekeeper,
+                                        electrical_store_base.group_electrical_manager">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="scrap_count"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Scrap Ops
+                                </span>
+                            </div>
+                        </button>
+                        <button name="action_view_scraps"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-money"
+                                groups="electrical_store_base.group_electrical_accountant,
+                                        electrical_store_base.group_electrical_manager">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="scrap_value"
+                                           widget="monetary"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Damage Value
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Archive Ribbon -->
+                    <widget name="web_ribbon"
+                            title="Archived"
+                            bg_color="text-bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+
+                    <field name="active" invisible="1"/>
+
+                    <!-- Title -->
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"
+                                   placeholder="Damage Reason / سبب التلف"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Details / التفاصيل">
+                            <field name="name_arabic"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Description / الوصف" name="description">
+                            <field name="notes"
+                                   placeholder="Detailed description of this damage reason..."/>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Damage Reason Search View
+         ================================================================ -->
+
+    <record id="view_damage_reason_search" model="ir.ui.view">
+        <field name="name">damage.reason.search</field>
+        <field name="model">damage.reason</field>
+        <field name="arch" type="xml">
+            <search string="Search Damage Reasons / بحث أسباب التلف">
+
+                <field name="name"
+                       string="Reason"
+                       filter_domain="[
+                           '|', '|',
+                           ('name', 'ilike', self),
+                           ('name_arabic', 'ilike', self),
+                           ('code', 'ilike', self)
+                       ]"/>
+
+                <separator/>
+
+                <filter name="filter_active"
+                        string="Active / نشط"
+                        domain="[('active', '=', True)]"/>
+                <filter name="filter_archived"
+                        string="Archived / مؤرشف"
+                        domain="[('active', '=', False)]"/>
+
+            </search>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Damage Reason Action
+         ================================================================ -->
+
+    <record id="action_damage_reason" model="ir.actions.act_window">
+        <field name="name">Damage Reasons / أسباب التلف</field>
+        <field name="res_model">damage.reason</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_damage_reason_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first damage reason!
+            </p>
+            <p>
+                Define damage reasons to classify scrap operations
+                and generate accurate damage reports.
+            </p>
+        </field>
+    </record>
+
+</odoo>

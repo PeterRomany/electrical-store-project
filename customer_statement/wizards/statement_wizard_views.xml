@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Customer Statement Wizard Form View
+         ================================================================ -->
+
+    <record id="view_customer_statement_wizard_form" model="ir.ui.view">
+        <field name="name">customer.statement.wizard.form</field>
+        <field name="model">customer.statement.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Customer Account Statement / كشف حساب العميل">
+                <sheet>
+
+                    <!-- Header Banner -->
+                    <div class="alert alert-info" role="alert" style="direction:rtl;">
+                        <i class="fa fa-file-text-o me-2"/>
+                        <strong>كشف حساب العميل — Customer Account Statement</strong>
+                        <p class="mb-0" style="font-size:12px; margin-top:4px;">
+                            حدد العميل والفترة الزمنية لإنشاء كشف الحساب وطباعته أو إرساله بالبريد الإلكتروني.
+                            <br/>
+                            Select the customer and period to generate, print, or email the account statement.
+                        </p>
+                    </div>
+
+                    <!-- Main Inputs -->
+                    <group>
+                        <group string="Customer / العميل">
+                            <field name="partner_id"
+                                   options="{'no_create': True}"
+                                   placeholder="اختر العميل..."/>
+                            <field name="currency_id" readonly="1"/>
+                            <field name="company_id"  readonly="1"/>
+                        </group>
+                        <group string="Period / الفترة">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="include_unreconciled_only"/>
+                            <field name="include_internal_notes"/>
+                        </group>
+                    </group>
+
+                    <!-- Statement Summary — shown after partner selected -->
+                    <group string="Statement Summary / ملخص الكشف"
+                           attrs="{'invisible': [('partner_id', '=', False)]}">
+                        <group>
+                            <field name="opening_balance"
+                                   readonly="1"
+                                   widget="monetary"
+                                   string="Opening Balance / الرصيد الافتتاحي"/>
+                            <field name="total_debits"
+                                   readonly="1"
+                                   widget="monetary"
+                                   string="Total Debits / إجمالي المديونية"/>
+                            <field name="total_credits"
+                                   readonly="1"
+                                   widget="monetary"
+                                   string="Total Credits / إجمالي الدائنية"/>
+                        </group>
+                        <group>
+                            <field name="closing_balance"
+                                   readonly="1"
+                                   widget="monetary"
+                                   string="Closing Balance / الرصيد الختامي"
+                                   decoration-danger="closing_balance > 0"
+                                   decoration-success="closing_balance &lt;= 0"/>
+                            <field name="transaction_count"
+                                   readonly="1"
+                                   string="Transactions / عدد الحركات"/>
+                        </group>
+                    </group>
+
+                    <!-- Credit Summary — shown if partner has credit limit -->
+                    <group string="Credit Summary / ملخص الائتمان"
+                           attrs="{
+                               'invisible': [
+                                   '|',
+                                   ('partner_id', '=', False),
+                                   ('partner_id.credit_limit', '=', 0)
+                               ]
+                           }"
+                           groups="electrical_store_base.group_electrical_accountant,
+                                   electrical_store_base.group_electrical_manager">
+                        <group>
+                            <field name="partner_id.credit_limit"
+                                   readonly="1"
+                                   widget="monetary"
+                                   string="Credit Limit / الحد الائتماني"
+                                   no_label="0"/>
+                            <field name="partner_id.credit_used"
+                                   readonly="1"
+                                   widget="monetary"
+                                   string="Credit Used / المستخدم"
+                                   no_label="0"/>
+                            <field name="partner_id.credit_available"
+                                   readonly="1"
+                                   widget="monetary"
+                                   string="Available / المتاح"
+                                   no_label="0"/>
+                        </group>
+                        <group>
+                            <field name="partner_id.credit_status"
+                                   readonly="1"
+                                   string="Credit Status / الحالة"
+                                   decoration-danger="partner_id.credit_status == 'blocked'"
+                                   decoration-warning="partner_id.credit_status == 'warning'"
+                                   decoration-success="partner_id.credit_status == 'ok'"
+                                   no_label="0"/>
+                            <field name="partner_id.customer_type"
+                                   readonly="1"
+                                   string="Customer Type / نوع العميل"
+                                   no_label="0"/>
+                        </group>
+                    </group>
+
+                    <!-- No Transactions Warning -->
+                    <div class="alert alert-warning"
+                         role="alert"
+                         style="direction:rtl;"
+                         attrs="{
+                             'invisible': [
+                                 '|',
+                                 ('partner_id', '=', False),
+                                 ('transaction_count', '!=', 0)
+                             ]
+                         }">
+                        <i class="fa fa-exclamation-triangle me-2"/>
+                        لا توجد حركات لهذا العميل في الفترة المحددة.
+                        <br/>
+                        <small>No transactions found for this customer in the selected period.</small>
+                    </div>
+
+                </sheet>
+
+                <!-- Footer Buttons -->
+                <footer>
+
+                    <!-- Print PDF -->
+                    <button name="action_print_statement"
+                            string="🖨️ Print PDF / طباعة"
+                            type="object"
+                            class="btn-primary"
+                            attrs="{
+                                'invisible': [('transaction_count', '=', 0)]
+                            }"
+                            data-hotkey="p"/>
+
+                    <!-- Send by Email -->
+                    <button name="action_send_by_email"
+                            string="📧 Send by Email / إرسال بالبريد"
+                            type="object"
+                            class="btn-secondary"
+                            attrs="{
+                                'invisible': [('transaction_count', '=', 0)]
+                            }"
+                            data-hotkey="e"/>
+
+                    <!-- Close -->
+                    <button string="Close / إغلاق"
+                            special="cancel"
+                            class="btn-secondary"
+                            data-hotkey="x"/>
+
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Action to open wizard
+         ================================================================ -->
+
+    <record id="action_customer_statement_wizard" model="ir.actions.act_window">
+        <field name="name">Customer Statement / كشف حساب العميل</field>
+        <field name="res_model">customer.statement.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_customer_statement_wizard_form"/>
+    </record>
+
+</odoo>

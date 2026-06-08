@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Damage Summary PDF Report Action
+         ================================================================ -->
+
+    <record id="action_report_damage_summary" model="ir.actions.report">
+        <field name="name">Damage Summary Report / تقرير ملخص التلف</field>
+        <field name="model">stock.scrap</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">
+            inventory_damage_management.report_damage_summary_template
+        </field>
+        <field name="report_file">
+            inventory_damage_management.report_damage_summary_template
+        </field>
+        <field name="print_report_name">
+            'Damage Report - %s' % (context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d'))
+        </field>
+        <field name="binding_model_id" ref="stock.model_stock_scrap"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+        <field name="groups_id" eval="[
+            (4, ref('electrical_store_base.group_electrical_storekeeper')),
+            (4, ref('electrical_store_base.group_electrical_accountant')),
+            (4, ref('electrical_store_base.group_electrical_manager')),
+        ]"/>
+    </record>
+
+</odoo>

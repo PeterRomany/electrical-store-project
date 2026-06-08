@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         ArabicSearchBar Template
+         Full Arabic RTL search bar for POS product search
+         ================================================================ -->
+
+    <t t-name="electrical_pos_custom.ArabicSearchBar">
+        <div class="electrical-search-bar" dir="rtl">
+
+            <!-- Mode Toggle Button -->
+            <button
+                class="btn btn-sm btn-outline-secondary"
+                t-on-click="toggleInputMode"
+                t-att-title="'وضع الإدخال: ' + inputModeLabel">
+                <i t-att-class="'fa ' + searchIcon"/>
+                <span class="ms-1" style="font-size:11px;">
+                    <t t-esc="inputModeLabel"/>
+                </span>
+            </button>
+
+            <!-- Search Input -->
+            <div class="search-input-wrapper" style="flex:1; position:relative;">
+                <input
+                    t-ref="searchInput"
+                    type="text"
+                    class="form-control"
+                    t-att-placeholder="props.placeholder"
+                    t-att-value="state.searchTerm"
+                    t-on-input="onInput"
+                    t-on-keydown="onKeydown"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    dir="rtl"
+                    style="padding-left: 32px;"
+                />
+
+                <!-- Clear Button inside input -->
+                <button
+                    t-if="state.showClear"
+                    class="btn btn-sm"
+                    t-on-click="clearSearch"
+                    style="
+                        position: absolute;
+                        left: 4px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        padding: 2px 6px;
+                        color: #6c757d;
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        z-index: 2;
+                    ">
+                    <i class="fa fa-times"/>
+                </button>
+            </div>
+
+            <!-- Result Count Badge -->
+            <span
+                t-if="state.searchTerm"
+                t-att-class="'badge ' + (state.resultCount === 0 ? 'bg-danger' : 'bg-success')"
+                style="font-size: 11px; white-space: nowrap; min-width: 60px; text-align: center;">
+                <t t-esc="resultLabel"/>
+            </span>
+
+            <!-- Loading Spinner -->
+            <span t-if="state.isSearching" style="color: #6c757d;">
+                <i class="fa fa-spinner fa-spin"/>
+            </span>
+
+        </div>
+
+        <!-- Search Hints (shown when input is empty) -->
+        <div
+            t-if="!state.searchTerm"
+            class="search-hints"
+            dir="rtl"
+            style="
+                padding: 4px 12px;
+                font-size: 11px;
+                color: #adb5bd;
+                background: #f8f9fa;
+                border-bottom: 1px solid #e9ecef;
+                display: flex;
+                gap: 12px;
+            ">
+            <span><i class="fa fa-barcode"/> باركود</span>
+            <span><i class="fa fa-font"/> اسم المنتج</span>
+            <span><i class="fa fa-tag"/> الاسم الشائع</span>
+            <span><i class="fa fa-search"/> كلمات عربية</span>
+            <span><i class="fa fa-list-ol"/> كود داخلي</span>
+        </div>
+
+        <!-- No Results Message -->
+        <div
+            t-if="state.searchTerm and state.resultCount === 0"
+            class="no-results-message"
+            dir="rtl"
+            style="
+                padding: 16px;
+                text-align: center;
+                color: #dc3545;
+                font-size: 13px;
+                background: #fff5f5;
+                border-bottom: 1px solid #f8d7da;
+            ">
+            <i class="fa fa-exclamation-triangle me-2"/>
+            لا توجد منتجات مطابقة لـ «<strong><t t-esc="state.searchTerm"/></strong>»
+            <br/>
+            <small style="color: #6c757d;">
+                تحقق من الاسم أو الباركود أو الكلمات المفتاحية
+            </small>
+        </div>
+
+    </t>
+
+</templates>

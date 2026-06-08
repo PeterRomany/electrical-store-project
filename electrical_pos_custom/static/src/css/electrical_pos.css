@@ -1,0 +1,416 @@
+/* ============================================================
+   Electrical Store POS — Custom Styles
+   Supports RTL Arabic layout
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   RTL Global Layout
+   ------------------------------------------------------------ */
+
+.pos-rtl {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Cairo', 'Tajawal', 'Arial', sans-serif;
+}
+
+.pos-rtl .pos-content {
+    flex-direction: row-reverse;
+}
+
+.pos-rtl .order-container {
+    direction: rtl;
+}
+
+.pos-rtl input,
+.pos-rtl textarea,
+.pos-rtl select {
+    text-align: right;
+    direction: rtl;
+}
+
+/* ------------------------------------------------------------
+   Arabic Search Bar
+   ------------------------------------------------------------ */
+
+.electrical-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    direction: rtl;
+}
+
+.electrical-search-bar input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    font-size: 14px;
+    direction: rtl;
+    text-align: right;
+    transition: border-color 0.2s ease;
+}
+
+.electrical-search-bar input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+.electrical-search-bar input::placeholder {
+    color: #adb5bd;
+    font-size: 13px;
+}
+
+.electrical-search-bar .search-icon {
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* ------------------------------------------------------------
+   Product Card — Electrical Info
+   ------------------------------------------------------------ */
+
+.electrical-product-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+}
+
+.electrical-product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.electrical-product-card .card-body {
+    padding: 10px;
+}
+
+.electrical-product-card .product-name {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    color: #212529;
+    direction: rtl;
+}
+
+.electrical-product-card .product-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #198754;
+}
+
+.electrical-product-card .product-brand {
+    font-size: 11px;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+.electrical-product-card .product-stock {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: #0d6efd;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 12px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.electrical-product-card .product-stock.stock-low {
+    background: #dc3545;
+}
+
+.electrical-product-card .product-stock.stock-zero {
+    background: #6c757d;
+}
+
+.electrical-product-card .product-watt {
+    font-size: 10px;
+    color: #fd7e14;
+    font-weight: 600;
+}
+
+.electrical-product-card .product-shelf {
+    font-size: 10px;
+    color: #0dcaf0;
+    font-weight: 500;
+}
+
+/* ------------------------------------------------------------
+   Customer Credit Widget
+   ------------------------------------------------------------ */
+
+.customer-credit-widget {
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 6px 0;
+    direction: rtl;
+}
+
+.customer-credit-widget.status-ok {
+    background: #d1e7dd;
+    border: 1px solid #a3cfbb;
+}
+
+.customer-credit-widget.status-warning {
+    background: #fff3cd;
+    border: 1px solid #ffda6a;
+}
+
+.customer-credit-widget.status-blocked {
+    background: #f8d7da;
+    border: 1px solid #f1aeb5;
+}
+
+.customer-credit-widget .credit-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.customer-credit-widget.status-ok .credit-title {
+    color: #0a3622;
+}
+
+.customer-credit-widget.status-warning .credit-title {
+    color: #664d03;
+}
+
+.customer-credit-widget.status-blocked .credit-title {
+    color: #58151c;
+}
+
+.customer-credit-widget .credit-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 3px;
+    color: #495057;
+}
+
+.customer-credit-widget .credit-row .label {
+    font-weight: 500;
+}
+
+.customer-credit-widget .credit-row .value {
+    font-weight: 700;
+}
+
+.customer-credit-widget .credit-bar {
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 4px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.customer-credit-widget .credit-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.customer-credit-widget.status-ok .credit-bar-fill {
+    background: #198754;
+}
+
+.customer-credit-widget.status-warning .credit-bar-fill {
+    background: #ffc107;
+}
+
+.customer-credit-widget.status-blocked .credit-bar-fill {
+    background: #dc3545;
+}
+
+.customer-type-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #6c757d;
+    color: #fff;
+}
+
+.customer-type-badge.retail      { background: #0d6efd; }
+.customer-type-badge.electrician { background: #fd7e14; }
+.customer-type-badge.contractor  { background: #6f42c1; }
+.customer-type-badge.company     { background: #198754; }
+
+/* ------------------------------------------------------------
+   Product Info Popup
+   ------------------------------------------------------------ */
+
+.product-info-popup {
+    direction: rtl;
+    text-align: right;
+    min-width: 320px;
+    max-width: 420px;
+}
+
+.product-info-popup .popup-header {
+    background: #212529;
+    color: #fff;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 10px 10px 0 0;
+}
+
+.product-info-popup .popup-body {
+    padding: 16px 18px;
+}
+
+.product-info-popup .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+}
+
+.product-info-popup .info-row:last-child {
+    border-bottom: none;
+}
+
+.product-info-popup .info-label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.product-info-popup .info-value {
+    font-weight: 700;
+    color: #212529;
+}
+
+.product-info-popup .stock-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.product-info-popup .stock-badge.in-stock    { background: #d1e7dd; color: #0a3622; }
+.product-info-popup .stock-badge.low-stock   { background: #fff3cd; color: #664d03; }
+.product-info-popup .stock-badge.out-of-stock{ background: #f8d7da; color: #58151c; }
+
+/* ------------------------------------------------------------
+   Packaging Selector Popup
+   ------------------------------------------------------------ */
+
+.packaging-selector-popup {
+    direction: rtl;
+    text-align: right;
+    min-width: 300px;
+}
+
+.packaging-selector-popup .popup-header {
+    background: #0d6efd;
+    color: #fff;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 10px 10px 0 0;
+}
+
+.packaging-selector-popup .packaging-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 16px;
+}
+
+.packaging-selector-popup .packaging-option {
+    padding: 14px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    background: #fff;
+}
+
+.packaging-selector-popup .packaging-option:hover {
+    border-color: #0d6efd;
+    background: #e7f1ff;
+}
+
+.packaging-selector-popup .packaging-option.selected {
+    border-color: #0d6efd;
+    background: #0d6efd;
+    color: #fff;
+}
+
+.packaging-selector-popup .packaging-option .pack-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.packaging-selector-popup .packaging-option .pack-qty {
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+/* ------------------------------------------------------------
+   Credit Block Overlay
+   ------------------------------------------------------------ */
+
+.credit-block-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(220, 53, 69, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    direction: rtl;
+}
+
+.credit-block-overlay .block-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.credit-block-overlay .block-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.credit-block-overlay .block-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #dc3545;
+    margin-bottom: 8px;
+}
+
+.credit-block-overlay .block-message {
+    font-size: 14px;
+    color: #495057;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.credit-block-overlay .block-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}

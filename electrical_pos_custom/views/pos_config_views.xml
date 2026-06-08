@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Extend POS Configuration Form
+         Add Electrical Store settings tab
+         ================================================================ -->
+
+    <record id="view_pos_config_form_electrical" model="ir.ui.view">
+        <field name="name">pos.config.form.electrical</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+
+            <notebook position="inside">
+                <page string="Electrical Store / محل كهرباء"
+                      name="electrical_store">
+
+                    <!-- Search Settings -->
+                    <group string="Search Settings / إعدادات البحث">
+                        <group>
+                            <field name="iface_arabic_search"/>
+                        </group>
+                        <group>
+                            <div class="text-muted" style="font-size:12px;">
+                                Allow cashiers to search products
+                                using Arabic name, alias, and keywords.
+                                يتيح البحث بالاسم العربي والاسم الشائع
+                                والكلمات المفتاحية.
+                            </div>
+                        </group>
+                    </group>
+
+                    <separator/>
+
+                    <!-- Display Settings -->
+                    <group string="Display Settings / إعدادات العرض">
+                        <group>
+                            <field name="iface_show_stock"/>
+                            <field name="iface_show_electrical_info"/>
+                            <field name="iface_show_customer_balance"/>
+                        </group>
+                        <group>
+                            <div class="text-muted" style="font-size:12px;">
+                                Controls what information is shown
+                                on product cards and customer info
+                                in the POS screen.
+                            </div>
+                        </group>
+                    </group>
+
+                    <separator/>
+
+                    <!-- Sales Settings -->
+                    <group string="Sales Settings / إعدادات المبيعات">
+                        <group>
+                            <field name="iface_packaging_selector"/>
+                            <field name="iface_credit_warning"/>
+                        </group>
+                        <group>
+                            <div class="text-muted" style="font-size:12px;">
+                                Packaging selector lets cashiers choose
+                                Piece, Box, Carton, Pack, Meter, or Roll.
+                                Credit warning alerts cashier when
+                                customer reaches credit limit.
+                            </div>
+                        </group>
+                    </group>
+
+                    <separator/>
+
+                    <!-- Layout Settings -->
+                    <group string="Layout Settings / إعدادات التخطيط">
+                        <group>
+                            <field name="iface_rtl"/>
+                        </group>
+                        <group>
+                            <div class="text-muted" style="font-size:12px;">
+                                Enables right-to-left layout
+                                for full Arabic UI support.
+                                يفعّل تخطيط اليمين إلى اليسار
+                                لدعم كامل للواجهة العربية.
+                            </div>
+                        </group>
+                    </group>
+
+                </page>
+            </notebook>
+
+        </field>
+    </record>
+
+</odoo>

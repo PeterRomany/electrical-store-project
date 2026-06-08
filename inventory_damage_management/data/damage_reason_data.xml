@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ================================================================
+             Predefined Damage Reasons for Electrical Store
+             noupdate="1" — will not overwrite user modifications on upgrade
+             ================================================================ -->
+
+        <!-- Physical Damage / تلف مادي -->
+        <record id="damage_reason_physical" model="damage.reason">
+            <field name="name">Physical Damage</field>
+            <field name="name_arabic">تلف مادي</field>
+            <field name="code">PHY</field>
+            <field name="sequence">10</field>
+            <field name="color">1</field>
+            <field name="notes">
+                Product damaged due to physical impact, dropping,
+                crushing, or mishandling during storage or transport.
+                تلف المنتج بسبب الصدمات أو السقوط أو سوء التخزين أو النقل.
+            </field>
+        </record>
+
+        <!-- Water Damage / تلف مائي -->
+        <record id="damage_reason_water" model="damage.reason">
+            <field name="name">Water Damage</field>
+            <field name="name_arabic">تلف مائي</field>
+            <field name="code">WAT</field>
+            <field name="sequence">20</field>
+            <field name="color">4</field>
+            <field name="notes">
+                Product damaged due to water exposure, flooding,
+                humidity, or moisture penetration.
+                تلف المنتج بسبب التعرض للماء أو الرطوبة أو الفيضان.
+            </field>
+        </record>
+
+        <!-- Electrical Fault / عطل كهربائي -->
+        <record id="damage_reason_electrical" model="damage.reason">
+            <field name="name">Electrical Fault</field>
+            <field name="name_arabic">عطل كهربائي</field>
+            <field name="code">ELC</field>
+            <field name="sequence">30</field>
+            <field name="color">2</field>
+            <field name="notes">
+                Product damaged due to electrical surge, short circuit,
+                overvoltage, or testing failure.
+                تلف الناتج عن ضربة تيار أو قصر دائرة أو جهد زائد.
+            </field>
+        </record>
+
+        <!-- Expired / منتهي الصلاحية -->
+        <record id="damage_reason_expired" model="damage.reason">
+            <field name="name">Expired / Outdated</field>
+            <field name="name_arabic">منتهي الصلاحية</field>
+            <field name="code">EXP</field>
+            <field name="sequence">40</field>
+            <field name="color">3</field>
+            <field name="notes">
+                Product has passed its shelf life, warranty period,
+                or has become technically obsolete.
+                المنتج انتهت صلاحيته أو أصبح قديماً ولا يمكن بيعه.
+            </field>
+        </record>
+
+        <!-- Missing / مفقود -->
+        <record id="damage_reason_missing" model="damage.reason">
+            <field name="name">Missing / Theft</field>
+            <field name="name_arabic">مفقود / سرقة</field>
+            <field name="code">MSS</field>
+            <field name="sequence">50</field>
+            <field name="color">5</field>
+            <field name="notes">
+                Product missing from inventory due to theft,
+                loss, or inventory count discrepancy.
+                منتج مفقود من المخزن بسبب سرقة أو ضياع أو فرق جرد.
+            </field>
+        </record>
+
+        <!-- Return Damage / تلف مرتجعات -->
+        <record id="damage_reason_return" model="damage.reason">
+            <field name="name">Return Damage</field>
+            <field name="name_arabic">تلف مرتجعات</field>
+            <field name="code">RET</field>
+            <field name="sequence">60</field>
+            <field name="color">6</field>
+            <field name="notes">
+                Product returned by customer in damaged condition
+                and cannot be resold.
+                منتج مُرجع من العميل في حالة تالفة ولا يمكن إعادة بيعه.
+            </field>
+        </record>
+
+        <!-- Manufacturing Defect / عيب تصنيع -->
+        <record id="damage_reason_manufacturing" model="damage.reason">
+            <field name="name">Manufacturing Defect</field>
+            <field name="name_arabic">عيب تصنيع</field>
+            <field name="code">MFG</field>
+            <field name="sequence">70</field>
+            <field name="color">7</field>
+            <field name="notes">
+                Product has a factory defect, wrong specification,
+                or failed quality control inspection.
+                منتج به عيب مصنعي أو مواصفات خاطئة أو فشل في فحص الجودة.
+            </field>
+        </record>
+
+        <!-- Fire Damage / تلف حريق -->
+        <record id="damage_reason_fire" model="damage.reason">
+            <field name="name">Fire Damage</field>
+            <field name="name_arabic">تلف حريق</field>
+            <field name="code">FIR</field>
+            <field name="sequence">80</field>
+            <field name="color">8</field>
+            <field name="notes">
+                Product damaged due to fire, heat exposure,
+                or smoke damage.
+                تلف الناتج عن حريق أو تعرض للحرارة أو الدخان.
+            </field>
+        </record>
+
+        <!-- Other / أخرى -->
+        <record id="damage_reason_other" model="damage.reason">
+            <field name="name">Other</field>
+            <field name="name_arabic">أخرى</field>
+            <field name="code">OTH</field>
+            <field name="sequence">999</field>
+            <field name="color">0</field>
+            <field name="notes">
+                Any other damage reason not covered by the
+                predefined categories. Please add notes.
+                أي سبب تلف آخر غير مذكور. يرجى إضافة ملاحظات.
+            </field>
+        </record>
+
+    </data>
+</odoo>

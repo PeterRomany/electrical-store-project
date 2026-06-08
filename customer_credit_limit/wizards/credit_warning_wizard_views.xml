@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Credit Warning Wizard Form View
+         ================================================================ -->
+
+    <record id="view_credit_warning_wizard_form" model="ir.ui.view">
+        <field name="name">credit.warning.wizard.form</field>
+        <field name="model">credit.warning.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Credit Override Required / تجاوز الحد الائتماني">
+                <sheet>
+
+                    <!-- Warning Banner -->
+                    <div class="alert alert-danger" role="alert" style="direction:rtl;">
+                        <h4 class="alert-heading">
+                            🚫 تجاوز الحد الائتماني — Credit Limit Exceeded
+                        </h4>
+                        <p>
+                            العميل تجاوز الحد الائتماني المسموح به.
+                            يجب إدخال سبب التجاوز لتأكيد الطلب.
+                        </p>
+                        <hr/>
+                        <p class="mb-0" style="font-size:12px;">
+                            This customer has exceeded their credit limit.
+                            A manager override reason is required to confirm this order.
+                        </p>
+                    </div>
+
+                    <!-- Customer + Order Info -->
+                    <group>
+                        <group string="Customer / العميل">
+                            <field name="partner_id" readonly="1"/>
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="order_amount" readonly="1"/>
+                        </group>
+                        <group string="Credit Summary / ملخص الائتمان">
+                            <field name="credit_status"
+                                   readonly="1"
+                                   decoration-danger="credit_status == 'blocked'"
+                                   decoration-warning="credit_status == 'warning'"
+                                   decoration-success="credit_status == 'ok'"/>
+                            <field name="credit_limit"    readonly="1"/>
+                            <field name="credit_used"     readonly="1"/>
+                            <field name="credit_available" readonly="1"/>
+                            <field name="credit_usage_pct"
+                                   readonly="1"
+                                   string="Current Usage (%) / الاستخدام الحالي"/>
+                        </group>
+                    </group>
+
+                    <!-- Projected Impact -->
+                    <group string="After This Order / بعد هذا الطلب">
+                        <group>
+                            <field name="projected_used"
+                                   readonly="1"
+                                   string="Projected Used / الرصيد المتوقع"/>
+                            <field name="projected_pct"
+                                   readonly="1"
+                                   string="Projected Usage (%) / النسبة المتوقعة"
+                                   decoration-danger="projected_pct >= 100"
+                                   decoration-warning="projected_pct >= 80"/>
+                        </group>
+                    </group>
+
+                    <!-- Override Reason -->
+                    <group string="Manager Override / تجاوز المدير"
+                           groups="electrical_store_base.group_electrical_manager">
+                        <field name="override_reason"
+                               nolabel="1"
+                               placeholder="أدخل سبب تجاوز حظر الائتمان هنا... (مطلوب)\nEnter the reason for overriding the credit block... (required)"
+                               style="min-height:80px;"/>
+                    </group>
+
+                    <!-- Access Denied Message for Non-Managers -->
+                    <div class="alert alert-warning"
+                         role="alert"
+                         style="direction:rtl;"
+                         groups="electrical_store_base.group_electrical_cashier,
+                                 electrical_store_base.group_electrical_storekeeper,
+                                 electrical_store_base.group_electrical_accountant">
+                        <strong>⚠️ صلاحية محدودة</strong>
+                        <p>
+                            فقط المدير يمكنه تجاوز حظر الائتمان.
+                            يرجى التواصل مع المدير.
+                        </p>
+                        <p style="font-size:12px;">
+                            Only a Manager can override a credit block.
+                            Please contact your manager.
+                        </p>
+                    </div>
+
+                </sheet>
+
+                <!-- Footer Buttons -->
+                <footer>
+                    <button name="action_override_and_confirm"
+                            string="Override and Confirm Order / تجاوز وتأكيد الطلب"
+                            type="object"
+                            class="btn-danger"
+                            groups="electrical_store_base.group_electrical_manager"
+                            data-hotkey="v"/>
+                    <button name="action_cancel"
+                            string="Cancel / إلغاء"
+                            type="object"
+                            class="btn-secondary"
+                            data-hotkey="x"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Damage Report Wizard Model
+         ================================================================ -->
+
+    <!-- Note: The wizard model is lightweight — no Python model needed.
+         We use stock.scrap directly with domain + context filtering.
+         The PDF report uses stock.scrap records directly. -->
+
+    <!-- ================================================================
+         Damage Summary Dashboard View (using stock.scrap pivot/graph)
+         ================================================================ -->
+
+    <!-- Damage by Reason — Bar Chart -->
+    <record id="view_damage_by_reason_graph" model="ir.ui.view">
+        <field name="name">damage.by.reason.graph</field>
+        <field name="model">stock.scrap</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="Damage by Reason / التلف حسب السبب"
+                   type="bar"
+                   stacked="0">
+                <field name="damage_reason_id" type="row"/>
+                <field name="damage_value"     type="measure"
+                       string="Damage Value / قيمة التلف"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Damage by Product — Bar Chart -->
+    <record id="view_damage_by_product_graph" model="ir.ui.view">
+        <field name="name">damage.by.product.graph</field>
+        <field name="model">stock.scrap</field>
+        <field name="priority">21</field>
+        <field name="arch" type="xml">
+            <graph string="Damage by Product / التلف حسب المنتج"
+                   type="bar">
+                <field name="product_id"   type="row"/>
+                <field name="damage_value" type="measure"
+                       string="Damage Value / قيمة التلف"/>
+                <field name="scrap_qty"    type="measure"
+                       string="Qty Scrapped / الكمية المتلفة"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Monthly Trend — Line Chart -->
+    <record id="view_damage_monthly_graph" model="ir.ui.view">
+        <field name="name">damage.monthly.graph</field>
+        <field name="model">stock.scrap</field>
+        <field name="priority">22</field>
+        <field name="arch" type="xml">
+            <graph string="Monthly Damage Trend / اتجاه التلف الشهري"
+                   type="line">
+                <field name="date_done"    type="col"     interval="month"/>
+                <field name="damage_value" type="measure"
+                       string="Damage Value / قيمة التلف"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Damage Analysis Actions
+         ================================================================ -->
+
+    <!-- By Reason -->
+    <record id="action_damage_analysis_by_reason" model="ir.actions.act_window">
+        <field name="name">Damage by Reason / التلف حسب السبب</field>
+        <field name="res_model">stock.scrap</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('state', '=', 'done')]</field>
+        <field name="context">{
+            'search_default_group_by_damage_reason': 1
+        }</field>
+        <field name="search_view_id"
+               ref="inventory_damage_management.view_stock_scrap_search_damage"/>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'graph',
+                              'view_id': ref('view_damage_by_reason_graph')}),
+                      (0, 0, {'view_mode': 'pivot',
+                              'view_id': ref('view_stock_scrap_pivot_damage')}),
+                      (0, 0, {'view_mode': 'list'})]"/>
+    </record>
+
+    <!-- By Product -->
+    <record id="action_damage_analysis_by_product" model="ir.actions.act_window">
+        <field name="name">Damage by Product / التلف حسب المنتج</field>
+        <field name="res_model">stock.scrap</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('state', '=', 'done')]</field>
+        <field name="context">{
+            'search_default_group_by_product': 1
+        }</field>
+        <field name="search_view_id"
+               ref="inventory_damage_management.view_stock_scrap_search_damage"/>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'graph',
+                              'view_id': ref('view_damage_by_product_graph')}),
+                      (0, 0, {'view_mode': 'pivot',
+                              'view_id': ref('view_stock_scrap_pivot_damage')}),
+                      (0, 0, {'view_mode': 'list'})]"/>
+    </record>
+
+    <!-- Monthly Trend -->
+    <record id="action_damage_monthly_trend" model="ir.actions.act_window">
+        <field name="name">Monthly Damage Trend / اتجاه التلف الشهري</field>
+        <field name="res_model">stock.scrap</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('state', '=', 'done')]</field>
+        <field name="context">{
+            'search_default_group_by_date': 1
+        }</field>
+        <field name="search_view_id"
+               ref="inventory_damage_management.view_stock_scrap_search_damage"/>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'graph',
+                              'view_id': ref('view_damage_monthly_graph')}),
+                      (0, 0, {'view_mode': 'pivot',
+                              'view_id': ref('view_stock_scrap_pivot_damage')}),
+                      (0, 0, {'view_mode': 'list'})]"/>
+    </record>
+
+</odoo>

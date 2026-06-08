@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Extend Partner Form — Add Customer Type field
+         ================================================================ -->
+
+    <record id="view_res_partner_form_electrical" model="ir.ui.view">
+        <field name="name">res.partner.form.electrical</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Insert customer_type after customer_rank field -->
+            <field name="customer_rank" position="after">
+                <field name="customer_type"
+                       attrs="{
+                           'invisible': [('customer_rank', '=', 0)],
+                           'required': [('customer_rank', '>', 0)]
+                       }"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Extend Partner List — Add Customer Type column
+         ================================================================ -->
+
+    <record id="view_res_partner_list_electrical" model="ir.ui.view">
+        <field name="name">res.partner.list.electrical</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+
+            <field name="phone" position="after">
+                <field name="customer_type"
+                       string="Customer Type / نوع العميل"
+                       optional="show"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Extend Partner Search — Add Customer Type filters
+         ================================================================ -->
+
+    <record id="view_res_partner_search_electrical" model="ir.ui.view">
+        <field name="name">res.partner.search.electrical</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+
+            <!-- Search field -->
+            <field name="name" position="after">
+                <field name="customer_type"
+                       string="Customer Type / نوع العميل"/>
+            </field>
+
+            <!-- Filters by customer type -->
+            <filter name="customer" position="after">
+                <separator/>
+                <filter name="filter_type_retail"
+                        string="Retail / تجزئة"
+                        domain="[('customer_type', '=', 'retail')]"/>
+                <filter name="filter_type_electrician"
+                        string="Electrician / كهربائي"
+                        domain="[('customer_type', '=', 'electrician')]"/>
+                <filter name="filter_type_contractor"
+                        string="Contractor / مقاول"
+                        domain="[('customer_type', '=', 'contractor')]"/>
+                <filter name="filter_type_company"
+                        string="Company / شركة"
+                        domain="[('customer_type', '=', 'company')]"/>
+            </filter>
+
+            <!-- Group By -->
+            <group expand="0" string="Group By" position="inside">
+                <filter name="group_by_customer_type"
+                        string="Customer Type / نوع العميل"
+                        context="{'group_by': 'customer_type'}"/>
+            </group>
+
+        </field>
+    </record>
+
+</odoo>

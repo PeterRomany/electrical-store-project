@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Extend Stock Scrap Form — Add Damage Fields
+         ================================================================ -->
+
+    <record id="view_stock_scrap_form_damage" model="ir.ui.view">
+        <field name="name">stock.scrap.form.damage</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_form_view2"/>
+        <field name="arch" type="xml">
+
+            <!-- Add damage fields after product field -->
+            <field name="product_id" position="after">
+
+                <!-- Damage Reason — Required -->
+                <field name="damage_reason_id"
+                       required="1"
+                       options="{'no_create': False}"
+                       placeholder="Select damage reason / اختر سبب التلف"/>
+
+                <!-- Damage Value — Computed, Readonly -->
+                <field name="damage_value"
+                       readonly="1"
+                       widget="monetary"
+                       string="Estimated Damage Value / قيمة التلف التقديرية"/>
+
+                <!-- Reported By -->
+                <field name="reported_by_id"
+                       readonly="1"
+                       string="Reported By / بواسطة"/>
+
+            </field>
+
+            <!-- Add damage notes after location fields -->
+            <field name="scrap_location_id" position="after">
+
+                <!-- Damage Notes -->
+                <field name="damage_notes"
+                       placeholder="Additional damage details... / تفاصيل إضافية عن التلف..."
+                       string="Damage Notes / ملاحظات التلف"/>
+
+                <!-- Damage Photo -->
+                <field name="damage_photo"
+                       widget="image"
+                       string="Damage Photo / صورة التلف"
+                       options="{'size': [128, 128]}"
+                       optional="show"/>
+
+            </field>
+
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Extend Stock Scrap List — Add Damage Columns
+         ================================================================ -->
+
+    <record id="view_stock_scrap_list_damage" model="ir.ui.view">
+        <field name="name">stock.scrap.list.damage</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_tree_view"/>
+        <field name="arch" type="xml">
+
+            <field name="product_id" position="after">
+                <field name="damage_reason_id"
+                       string="Damage Reason / سبب التلف"
+                       optional="show"/>
+                <field name="damage_value"
+                       string="Damage Value / قيمة التلف"
+                       widget="monetary"
+                       optional="show"
+                       groups="electrical_store_base.group_electrical_accountant,
+                               electrical_store_base.group_electrical_manager"/>
+                <field name="reported_by_id"
+                       string="Reported By / بواسطة"
+                       optional="hide"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Extend Stock Scrap Search — Add Damage Filters
+         ================================================================ -->
+
+    <record id="view_stock_scrap_search_damage" model="ir.ui.view">
+        <field name="name">stock.scrap.search.damage</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_search_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Search field for damage reason -->
+            <field name="product_id" position="after">
+                <field name="damage_reason_id"
+                       string="Damage Reason / سبب التلف"/>
+                <field name="reported_by_id"
+                       string="Reported By / بواسطة"/>
+            </field>
+
+            <!-- Damage Filters -->
+            <filter name="filter_draft" position="after">
+                <separator/>
+                <filter name="filter_has_damage_reason"
+                        string="With Damage Reason / له سبب تلف"
+                        domain="[('damage_reason_id', '!=', False)]"/>
+                <filter name="filter_no_damage_reason"
+                        string="No Damage Reason / بدون سبب"
+                        domain="[('damage_reason_id', '=', False)]"/>
+                <separator/>
+                <filter name="filter_damage_physical"
+                        string="Physical Damage / تلف مادي"
+                        domain="[('damage_reason_id.code', '=', 'PHY')]"/>
+                <filter name="filter_damage_water"
+                        string="Water Damage / تلف مائي"
+                        domain="[('damage_reason_id.code', '=', 'WAT')]"/>
+                <filter name="filter_damage_electrical"
+                        string="Electrical Fault / عطل كهربائي"
+                        domain="[('damage_reason_id.code', '=', 'ELC')]"/>
+                <filter name="filter_damage_return"
+                        string="Return Damage / تلف مرتجعات"
+                        domain="[('damage_reason_id.code', '=', 'RET')]"/>
+            </filter>
+
+            <!-- Group By -->
+            <group expand="0" string="Group By" position="inside">
+                <filter name="group_by_damage_reason"
+                        string="Damage Reason / سبب التلف"
+                        context="{'group_by': 'damage_reason_id'}"/>
+                <filter name="group_by_reported_by"
+                        string="Reported By / بواسطة"
+                        context="{'group_by': 'reported_by_id'}"/>
+                <filter name="group_by_product"
+                        string="Product / المنتج"
+                        context="{'group_by': 'product_id'}"/>
+                <filter name="group_by_date"
+                        string="Date / التاريخ"
+                        context="{'group_by': 'date_done:month'}"/>
+            </group>
+
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Damage Scrap Action — filtered view
+         ================================================================ -->
+
+    <record id="action_stock_scrap_damage" model="ir.actions.act_window">
+        <field name="name">Damage &amp; Scrap / الإتلاف والتلف</field>
+        <field name="res_model">stock.scrap</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_filter_done': 1
+        }</field>
+        <field name="search_view_id" ref="view_stock_scrap_search_damage"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No scrap operations found.
+            </p>
+            <p>
+                Record damaged or scrapped products here.
+                Always select a damage reason before validating.
+            </p>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Damage Graph View
+         ================================================================ -->
+
+    <record id="view_stock_scrap_graph_damage" model="ir.ui.view">
+        <field name="name">stock.scrap.graph.damage</field>
+        <field name="model">stock.scrap</field>
+        <field name="arch" type="xml">
+            <graph string="Damage Analysis / تحليل التلف"
+                   type="bar">
+                <field name="damage_reason_id"/>
+                <field name="damage_value" type="measure"/>
+                <field name="scrap_qty" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Damage Pivot View
+         ================================================================ -->
+
+    <record id="view_stock_scrap_pivot_damage" model="ir.ui.view">
+        <field name="name">stock.scrap.pivot.damage</field>
+        <field name="model">stock.scrap</field>
+        <field name="arch" type="xml">
+            <pivot string="Damage Pivot / محور التلف"
+                   display_quantity="true">
+                <field name="damage_reason_id" type="row"/>
+                <field name="product_id" type="row"/>
+                <field name="date_done" type="col" interval="month"/>
+                <field name="damage_value" type="measure"/>
+                <field name="scrap_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+</odoo>

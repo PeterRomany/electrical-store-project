@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Root Menu — Electrical Store
+         ================================================================ -->
+
+    <menuitem
+        id="menu_electrical_store_root"
+        name="Electrical Store / محل كهرباء"
+        sequence="10"
+        groups="electrical_store_base.group_electrical_cashier,
+                electrical_store_base.group_electrical_storekeeper,
+                electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+    <!-- ================================================================
+         Inventory Sub-Menu
+         ================================================================ -->
+
+    <menuitem
+        id="menu_electrical_inventory"
+        name="Inventory / المخزن"
+        parent="menu_electrical_store_root"
+        sequence="20"
+        groups="electrical_store_base.group_electrical_storekeeper,
+                electrical_store_base.group_electrical_manager"/>
+
+    <menuitem
+        id="menu_electrical_products"
+        name="Products / المنتجات"
+        parent="menu_electrical_inventory"
+        action="product.product_template_action_all"
+        sequence="10"
+        groups="electrical_store_base.group_electrical_storekeeper,
+                electrical_store_base.group_electrical_manager"/>
+
+    <menuitem
+        id="menu_electrical_brands"
+        name="Brands / الماركات"
+        parent="menu_electrical_inventory"
+        action="action_electrical_brand"
+        sequence="20"
+        groups="electrical_store_base.group_electrical_storekeeper,
+                electrical_store_base.group_electrical_manager"/>
+
+    <!-- ================================================================
+         Customers Sub-Menu
+         ================================================================ -->
+
+    <menuitem
+        id="menu_electrical_customers"
+        name="Customers / العملاء"
+        parent="menu_electrical_store_root"
+        sequence="30"
+        groups="electrical_store_base.group_electrical_cashier,
+                electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+    <menuitem
+        id="menu_electrical_customer_list"
+        name="Customer List / قائمة العملاء"
+        parent="menu_electrical_customers"
+        action="contacts.action_contacts"
+        sequence="10"
+        groups="electrical_store_base.group_electrical_cashier,
+                electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+    <!-- ================================================================
+         Configuration Sub-Menu
+         ================================================================ -->
+
+    <menuitem
+        id="menu_electrical_config"
+        name="Configuration / الإعدادات"
+        parent="menu_electrical_store_root"
+        sequence="100"
+        groups="electrical_store_base.group_electrical_manager"/>
+
+    <menuitem
+        id="menu_electrical_config_brands"
+        name="Brands / الماركات"
+        parent="menu_electrical_config"
+        action="action_electrical_brand"
+        sequence="10"
+        groups="electrical_store_base.group_electrical_manager"/>
+
+    <menuitem
+        id="menu_electrical_config_uom"
+        name="Units of Measure / وحدات القياس"
+        parent="menu_electrical_config"
+        action="uom.action_uom_form"
+        sequence="20"
+        groups="electrical_store_base.group_electrical_manager"/>
+
+    <menuitem
+        id="menu_electrical_config_categories"
+        name="Product Categories / فئات المنتجات"
+        parent="menu_electrical_config"
+        action="product.product_category_action_form"
+        sequence="30"
+        groups="electrical_store_base.group_electrical_manager"/>
+
+    <menuitem
+        id="menu_electrical_config_users"
+        name="Users &amp; Groups / المستخدمون"
+        parent="menu_electrical_config"
+        action="base.action_res_users"
+        sequence="40"
+        groups="electrical_store_base.group_electrical_manager"/>
+
+</odoo>

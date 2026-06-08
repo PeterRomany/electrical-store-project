@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="report_customer_statement_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lines"           t-value="o._get_statement_lines()"/>
+                <t t-set="opening_balance" t-value="o._get_opening_balance()"/>
+                <t t-set="commercial"      t-value="o.partner_id.commercial_partner_id"/>
+                <t t-call="web.external_layout">
+                    <div class="page" dir="rtl">
+
+                        <!-- ================================================
+                             Report Header
+                             ================================================ -->
+                        <div class="row mb-4">
+                            <div class="col-7">
+                                <h2 style="color:#0d6efd;">
+                                    كشف حساب عميل
+                                </h2>
+                                <h4 style="color:#6c757d;">
+                                    Customer Account Statement
+                                </h4>
+                            </div>
+                            <div class="col-5" style="text-align:right; direction:ltr;">
+                                <table class="table table-sm table-borderless"
+                                       style="font-size:12px;">
+                                    <tr>
+                                        <td><strong>Date / التاريخ:</strong></td>
+                                        <td>
+                                            <span t-esc="
+                                                context_timestamp(
+                                                    datetime.datetime.now()
+                                                ).strftime('%Y-%m-%d')
+                                            "/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Period / الفترة:</strong></td>
+                                        <td>
+                                            <span t-field="o.date_from"/> —
+                                            <span t-field="o.date_to"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Currency / العملة:</strong></td>
+                                        <td>
+                                            <span t-field="o.currency_id"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ================================================
+                             Customer Info Card
+                             ================================================ -->
+                        <div class="row mb-3">
+                            <div class="col-7">
+                                <div style="
+                                    background:#f8f9fa;
+                                    border-radius:8px;
+                                    padding:12px 16px;
+                                    border-right:4px solid #0d6efd;
+                                ">
+                                    <div style="font-size:16px; font-weight:700; margin-bottom:4px;">
+                                        <span t-field="o.partner_id.name"/>
+                                    </div>
+                                    <div style="font-size:12px; color:#6c757d;">
+                                        <t t-if="o.partner_id.phone">
+                                            <i class="fa fa-phone me-1"/>
+                                            <span t-field="o.partner_id.phone"/>
+                                            <span style="margin:0 8px;">|</span>
+                                        </t>
+                                        <t t-if="o.partner_id.email">
+                                            <i class="fa fa-envelope me-1"/>
+                                            <span t-field="o.partner_id.email"/>
+                                        </t>
+                                    </div>
+                                    <div style="margin-top:6px;">
+                                        <span style="
+                                            background:#0d6efd;
+                                            color:#fff;
+                                            padding:2px 10px;
+                                            border-radius:12px;
+                                            font-size:11px;
+                                            font-weight:600;
+                                        ">
+                                            <t t-esc="{
+                                                'retail':      'تجزئة / Retail',
+                                                'electrician': 'كهربائي / Electrician',
+                                                'contractor':  'مقاول / Contractor',
+                                                'company':     'شركة / Company',
+                                            }.get(commercial.customer_type, 'تجزئة')"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Credit Summary -->
+                            <div class="col-5">
+                                <t t-if="commercial.credit_limit > 0">
+                                    <div style="
+                                        border-radius:8px;
+                                        padding:10px 14px;
+                                        font-size:12px;
+                                        border:1px solid #dee2e6;
+                                    "
+                                    t-att-style="
+                                        'background:#f8d7da; border-color:#f1aeb5;'
+                                        if commercial.credit_status == 'blocked'
+                                        else 'background:#fff3cd; border-color:#ffda6a;'
+                                        if commercial.credit_status == 'warning'
+                                        else 'background:#d1e7dd; border-color:#a3cfbb;'
+                                    ">
+                                        <div style="font-weight:700; margin-bottom:6px;">
+                                            الائتمان / Credit
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+                                            <span>الحد / Limit:</span>
+                                            <strong>
+                                                <t t-esc="'%.2f' % (commercial.credit_limit or 0)"/>
+                                            </strong>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+                                            <span>المستخدم / Used:</span>
+                                            <strong>
+                                                <t t-esc="'%.2f' % (commercial.credit_used or 0)"/>
+                                            </strong>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between;">
+                                            <span>المتاح / Available:</span>
+                                            <strong>
+                                                <t t-esc="'%.2f' % (commercial.credit_available or 0)"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- ================================================
+                             Transactions Table
+                             ================================================ -->
+                        <table class="table table-sm table-bordered"
+                               style="font-size:12px; margin-top:12px;">
+                            <thead>
+                                <tr style="background:#0d6efd; color:#fff;">
+                                    <th style="width:90px;">التاريخ / Date</th>
+                                    <th style="width:120px;">المرجع / Ref</th>
+                                    <th>النوع / Type</th>
+                                    <th>البيان / Description</th>
+                                    <th class="text-end" style="width:100px;">
+                                        مدين / Debit
+                                    </th>
+                                    <th class="text-end" style="width:100px;">
+                                        دائن / Credit
+                                    </th>
+                                    <th class="text-end" style="width:110px;">
+                                        الرصيد / Balance
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <!-- Opening Balance Row -->
+                                <tr style="background:#e7f1ff; font-weight:700;">
+                                    <td colspan="4" style="text-align:center;">
+                                        الرصيد الافتتاحي — Opening Balance
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-if="opening_balance > 0">
+                                            <span t-esc="'%.2f' % opening_balance"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-if="opening_balance &lt; 0">
+                                            <span t-esc="'%.2f' % abs(opening_balance)"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-end"
+                                        t-att-style="
+                                            'color:#dc3545;' if opening_balance > 0
+                                            else 'color:#198754;'
+                                        ">
+                                        <span t-esc="'%.2f' % opening_balance"/>
+                                    </td>
+                                </tr>
+
+                                <!-- Transaction Lines -->
+                                <t t-foreach="lines" t-as="line">
+                                    <tr t-att-style="
+                                        'background:#fff5f5;'
+                                        if line.get('is_payment')
+                                        else ''
+                                    ">
+                                        <td>
+                                            <span t-esc="str(line['date'])"/>
+                                        </td>
+                                        <td style="font-size:10px;">
+                                            <span t-esc="line['name']"/>
+                                        </td>
+                                        <td>
+                                            <span style="
+                                                font-size:10px;
+                                                padding:1px 5px;
+                                                border-radius:4px;
+                                                background:#e9ecef;
+                                            ">
+                                                <t t-esc="line['type_label_ar']"/>
+                                            </span>
+                                        </td>
+                                        <td style="font-size:11px; color:#6c757d;">
+                                            <span t-esc="line.get('ref', '')"/>
+                                            <t t-if="line.get('payment_state') == 'partial'">
+                                                <span style="
+                                                    font-size:9px;
+                                                    color:#fd7e14;
+                                                    margin-right:4px;
+                                                ">⚡ مدفوع جزئياً</span>
+                                            </t>
+                                            <t t-if="line.get('payment_state') == 'not_paid'
+                                                     and not line.get('is_payment')">
+                                                <span style="
+                                                    font-size:9px;
+                                                    color:#dc3545;
+                                                    margin-right:4px;
+                                                ">● غير مدفوع</span>
+                                            </t>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-if="line['debit'] > 0">
+                                                <span t-esc="'%.2f' % line['debit']"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-end" style="color:#198754;">
+                                            <t t-if="line['credit'] > 0">
+                                                <span t-esc="'%.2f' % line['credit']"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-end font-weight-bold"
+                                            t-att-style="
+                                                'color:#dc3545; font-weight:700;'
+                                                if line['balance'] > 0
+                                                else 'color:#198754; font-weight:700;'
+                                            ">
+                                            <span t-esc="'%.2f' % line['balance']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- Closing Balance Row -->
+                                <t t-if="lines">
+                                    <tr style="
+                                        background:#212529;
+                                        color:#fff;
+                                        font-weight:700;
+                                        font-size:13px;
+                                    ">
+                                        <td colspan="4" style="text-align:center;">
+                                            الرصيد الختامي — Closing Balance
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="'%.2f' % o.total_debits"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="'%.2f' % o.total_credits"/>
+                                        </td>
+                                        <td class="text-end"
+                                            t-att-style="
+                                                'color:#f8d7da;'
+                                                if o.closing_balance > 0
+                                                else 'color:#d1e7dd;'
+                                            ">
+                                            <span t-esc="'%.2f' % o.closing_balance"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- No Transactions -->
+                                <t t-if="not lines">
+                                    <tr>
+                                        <td colspan="7"
+                                            style="
+                                                text-align:center;
+                                                padding:24px;
+                                                color:#6c757d;
+                                                font-style:italic;
+                                            ">
+                                            لا توجد حركات في هذه الفترة —
+                                            No transactions in this period
+                                        </td>
+                                    </tr>
+                                </t>
+
+                            </tbody>
+                        </table>
+
+                        <!-- ================================================
+                             Summary Box
+                             ================================================ -->
+                        <div class="row mt-3">
+                            <div class="col-6 offset-6">
+                                <table class="table table-sm table-bordered"
+                                       style="font-size:13px;">
+                                    <tr class="table-light">
+                                        <td>الرصيد الافتتاحي / Opening Balance</td>
+                                        <td class="text-end font-weight-bold">
+                                            <span t-esc="'%.2f' % opening_balance"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>إجمالي الفواتير / Total Invoices</td>
+                                        <td class="text-end" style="color:#dc3545;">
+                                            <span t-esc="'%.2f' % o.total_debits"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>إجمالي الدفعات / Total Payments</td>
+                                        <td class="text-end" style="color:#198754;">
+                                            <span t-esc="'%.2f' % o.total_credits"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="
+                                        font-weight:700;
+                                        font-size:14px;
+                                        background:#f8f9fa;
+                                    ">
+                                        <td>الرصيد المستحق / Amount Due</td>
+                                        <td class="text-end"
+                                            t-att-style="
+                                                'color:#dc3545;'
+                                                if o.closing_balance > 0
+                                                else 'color:#198754;'
+                                            ">
+                                            <span t-esc="'%.2f' % o.closing_balance"/>
+                                            <span style="font-size:11px; margin-right:4px;">
+                                                <t t-field="o.currency_id"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ================================================
+                             Footer Note
+                             ================================================ -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div style="
+                                    padding:10px;
+                                    background:#f8f9fa;
+                                    border-radius:6px;
+                                    font-size:11px;
+                                    color:#6c757d;
+                                    text-align:center;
+                                    border-top:2px solid #0d6efd;
+                                ">
+                                    <p class="mb-1">
+                                        هذا الكشف صادر آليًا ولا يحتاج إلى توقيع.
+                                        للاستفسار يرجى التواصل معنا.
+                                    </p>
+                                    <p class="mb-0">
+                                        This statement was generated automatically.
+                                        For queries please contact us.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

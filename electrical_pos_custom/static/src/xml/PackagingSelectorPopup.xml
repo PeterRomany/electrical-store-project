@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         PackagingSelectorPopup Template
+         Allows cashier to select packaging unit before adding to order
+         ================================================================ -->
+
+    <t t-name="electrical_pos_custom.PackagingSelectorPopup">
+        <div class="packaging-selector-popup popup" dir="rtl">
+
+            <!-- ============================================================
+                 Header
+                 ============================================================ -->
+            <div class="packaging-selector-popup popup-header">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>
+                        <i class="fa fa-th-large me-2"/>
+                        اختر وحدة التعبئة
+                    </span>
+                    <button class="btn btn-sm btn-outline-light"
+                            t-on-click="cancel">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+                <!-- Product Name Sub-header -->
+                <div style="font-size:12px; opacity:0.85; margin-top:4px;">
+                    <i class="fa fa-cube me-1"/>
+                    <t t-esc="props.product.display_name || props.product.name"/>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 Body
+                 ============================================================ -->
+            <div style="padding: 16px;">
+
+                <!-- Loading State -->
+                <div t-if="state.loading"
+                     style="text-align:center; padding:24px; color:#6c757d;">
+                    <i class="fa fa-spinner fa-spin fa-2x mb-3"
+                       style="display:block;"/>
+                    <div>جاري تحميل وحدات التعبئة...</div>
+                </div>
+
+                <t t-else="">
+
+                         <!-- Packaging Options Grid -->
+                    <div style="
+                        font-size:12px;
+                        font-weight:700;
+                        color:#495057;
+                        margin-bottom:10px;
+                    ">
+                        وحدات التعبئة المتاحة:
+                    </div>
+
+                    <div class="packaging-grid">
+                        <t t-foreach="state.packagingOptions"
+                           t-as="pack"
+                           t-key="pack.id">
+                            <div t-att-class="getPackagingClass(pack)"
+                                 t-on-click="() => this.selectPackaging(pack)">
+
+                                <!-- Icon -->
+                                <div style="font-size:22px; margin-bottom:6px;">
+                                    <i t-att-class="'fa ' + getPackagingIcon(pack.packaging_type)"/>
+                                </div>
+
+                                <!-- Name -->
+                                <div class="pack-name">
+                                    <t t-esc="getPackagingLabel(pack)"/>
+                                </div>
+
+                                <!-- Qty Description -->
+                                <div class="pack-qty">
+                                    <t t-esc="getPackagingQtyDesc(pack)"/>
+                                </div>
+
+                                <!-- Barcode if available -->
+                                <div t-if="pack.barcode"
+                                     style="font-size:9px; margin-top:3px; opacity:0.7;">
+                                    <i class="fa fa-barcode me-1"/>
+                                    <t t-esc="pack.barcode"/>
+                                </div>
+
+                                <!-- Selected Checkmark -->
+                                <div t-if="state.selectedPackaging and state.selectedPackaging.id === pack.id"
+                                     style="
+                                        position:absolute;
+                                        top:6px;
+                                        left:6px;
+                                        font-size:14px;
+                                     ">
+                                    ✅
+                                </div>
+
+                            </div>
+                        </t>
+                    </div>
+
+                         <!-- Quantity Selector -->
+                    <div style="
+                        margin-top:16px;
+                        padding:14px;
+                        background:#f8f9fa;
+                        border-radius:8px;
+                        border:1px solid #dee2e6;
+                    ">
+                        <div style="
+                            font-size:12px;
+                            font-weight:700;
+                            color:#495057;
+                            margin-bottom:10px;
+                        ">
+                            الكمية:
+                        </div>
+
+                        <div style="display:flex; align-items:center; gap:10px; justify-content:center;">
+
+                            <!-- Decrease -->
+                            <button class="btn btn-outline-secondary"
+                                    style="width:40px; height:40px; padding:0; font-size:18px;"
+                                    t-on-click="decreaseQty">
+                                <i class="fa fa-minus"/>
+                            </button>
+
+                            <!-- Qty Input -->
+                            <input type="number"
+                                   class="form-control"
+                                   style="
+                                    width:80px;
+                                    text-align:center;
+                                    font-size:18px;
+                                    font-weight:700;
+                                    padding:6px;
+                                   "
+                                   t-att-value="state.qty"
+                                   t-on-input="onQtyInput"
+                                   min="1"
+                                   step="1"/>
+
+                            <!-- Increase -->
+                            <button class="btn btn-outline-secondary"
+                                    style="width:40px; height:40px; padding:0; font-size:18px;"
+                                    t-on-click="increaseQty">
+                                <i class="fa fa-plus"/>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                         <!-- Conversion Summary -->
+                    <div t-if="state.selectedPackaging and !state.selectedPackaging.is_base"
+                         style="
+                            margin-top:12px;
+                            padding:10px 14px;
+                            background:#e7f1ff;
+                            border-radius:8px;
+                            border:1px solid #b6d4fe;
+                            font-size:13px;
+                            text-align:center;
+                         ">
+                        <i class="fa fa-exchange me-2" style="color:#0d6efd;"/>
+                        <strong><t t-esc="state.qty"/></strong>
+                        <span style="color:#6c757d; margin:0 4px;">×</span>
+                        <strong>
+                            <t t-esc="getPackagingLabel(state.selectedPackaging)"/>
+                        </strong>
+                        <span style="color:#6c757d; margin:0 4px;">=</span>
+                        <strong style="color:#0d6efd;">
+                            <t t-esc="baseQtyLabel"/>
+                        </strong>
+                        <div style="font-size:11px; color:#6c757d; margin-top:4px;">
+                            سيتم خصم هذه الكمية من المخزون
+                        </div>
+                    </div>
+
+                         <!-- Error Message -->
+                    <div t-if="state.error"
+                         style="
+                            margin-top:8px;
+                            padding:8px;
+                            background:#fff5f5;
+                            border-radius:6px;
+                            font-size:12px;
+                            color:#dc3545;
+                            text-align:center;
+                         ">
+                        <i class="fa fa-exclamation-triangle me-1"/>
+                        <t t-esc="state.error"/>
+                    </div>
+
+                </t>
+
+            </div>
+
+                 <!-- Footer Actions -->
+            <div style="
+                padding:12px 16px;
+                border-top:1px solid #dee2e6;
+                display:flex;
+                gap:10px;
+                justify-content:flex-start;
+                direction:rtl;
+            ">
+
+                <!-- Confirm Button -->
+                <button class="btn btn-primary"
+                        style="min-width:140px;"
+                        t-att-disabled="!canConfirm"
+                        t-on-click="confirm">
+                    <i class="fa fa-check me-2"/>
+                    تأكيد الإضافة
+                    <t t-if="state.selectedPackaging">
+                        <span style="opacity:0.8; font-size:11px; margin-right:4px;">
+                            (<t t-esc="baseQtyLabel"/>)
+                        </span>
+                    </t>
+                </button>
+
+                <!-- Cancel Button -->
+                <button class="btn btn-outline-secondary"
+                        t-on-click="cancel">
+                    <i class="fa fa-times me-2"/>
+                    إلغاء
+                </button>
+
+            </div>
+
+        </div>
+    </t>
+
+</templates>

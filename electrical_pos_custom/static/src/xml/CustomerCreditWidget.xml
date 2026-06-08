@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         CustomerCreditWidget Template
+         Displays customer credit status, balance, and type in POS
+         Shown when a customer is selected
+         ================================================================ -->
+
+    <t t-name="electrical_pos_custom.CustomerCreditWidget">
+
+        <!-- Loading State -->
+        <div t-if="state.loading"
+             class="customer-credit-widget status-ok"
+             dir="rtl"
+             style="text-align:center; padding: 12px;">
+            <i class="fa fa-spinner fa-spin me-2"/>
+            <span style="font-size:12px; color:#6c757d;">
+                جاري تحميل بيانات العميل...
+            </span>
+        </div>
+
+        <!-- No Partner Selected -->
+        <div t-elif="!props.partner" style="display:none;"/>
+
+        <!-- Credit Info Widget -->
+        <div t-elif="state.creditInfo"
+             t-att-class="widgetClass"
+             dir="rtl">
+
+            <!-- Header Row: Name + Customer Type Badge -->
+            <div class="credit-title">
+                <span t-esc="statusIcon"/>
+                <span style="flex:1; font-size:13px;">
+                    <t t-esc="state.creditInfo.name"/>
+                </span>
+                <span t-att-class="customerTypeBadgeClass">
+                    <t t-esc="customerTypeLabel"/>
+                </span>
+            </div>
+
+            <!-- Credit Rows (only if credit limit is set) -->
+            <t t-if="hasCreditLimit">
+
+                <div class="credit-row">
+                    <span class="label">الحد الائتماني</span>
+                    <span class="value">
+                        <t t-esc="formattedLimit"/>
+                    </span>
+                </div>
+
+                <div class="credit-row">
+                    <span class="label">المستخدم</span>
+                    <span class="value"
+                          t-att-style="
+                            state.creditInfo.credit_status === 'blocked'
+                                ? 'color: #dc3545;'
+                                : state.creditInfo.credit_status === 'warning'
+                                    ? 'color: #fd7e14;'
+                                    : 'color: #198754;'
+                          ">
+                        <t t-esc="formattedUsed"/>
+                    </span>
+                </div>
+
+                <div class="credit-row">
+                    <span class="label">المتاح</span>
+                    <span class="value"
+                          t-att-style="availableStyle">
+                        <t t-esc="formattedAvailable"/>
+                    </span>
+                </div>
+
+                <div class="credit-row">
+                    <span class="label">الحالة</span>
+                    <span class="value">
+                        <t t-esc="statusLabel"/>
+                    </span>
+                </div>
+
+                <!-- Usage Progress Bar -->
+                <div class="credit-bar">
+                    <div class="credit-bar-fill"
+                         t-att-style="barStyle"/>
+                </div>
+
+                <!-- Usage Percentage Label -->
+                <div style="
+                    font-size: 10px;
+                    text-align: left;
+                    color: #6c757d;
+                    margin-top: 3px;">
+                    <t t-esc="usagePercentage.toFixed(0)"/>٪ مستخدم
+                </div>
+
+            </t>
+
+            <!-- No Credit Limit Set -->
+            <t t-else="">
+                <div class="credit-row">
+                    <span class="label">الحد الائتماني</span>
+                    <span class="value" style="color: #198754;">
+                        غير محدود
+                    </span>
+                </div>
+            </t>
+
+            <!-- Blocked Warning Banner -->
+            <div t-if="state.creditInfo.credit_status === 'blocked'"
+                 style="
+                    margin-top: 8px;
+                    padding: 6px 10px;
+                    background: #dc3545;
+                    color: #fff;
+                    border-radius: 6px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    text-align: center;
+                 ">
+                🚫 العميل محظور — يلزم موافقة المدير
+            </div>
+
+            <!-- Warning Banner -->
+            <div t-if="state.creditInfo.credit_status === 'warning'"
+                 style="
+                    margin-top: 8px;
+                    padding: 6px 10px;
+                    background: #ffc107;
+                    color: #000;
+                    border-radius: 6px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    text-align: center;
+                 ">
+                ⚠️ تحذير — العميل قارب على الحد الائتماني
+            </div>
+
+            <!-- Error Message -->
+            <div t-if="state.error"
+                 style="
+                    margin-top: 6px;
+                    font-size: 10px;
+                    color: #6c757d;
+                    text-align: center;
+                 ">
+                <i class="fa fa-exclamation-circle me-1"/>
+                <t t-esc="state.error"/>
+            </div>
+
+        </div>
+
+        <!-- Fallback: partner set but no credit info loaded yet -->
+        <div t-elif="props.partner and !state.loading"
+             class="customer-credit-widget status-ok"
+             dir="rtl">
+            <div class="credit-title">
+                <span>👤</span>
+                <span style="flex:1; font-size:13px;">
+                    <t t-esc="props.partner.name"/>
+                </span>
+            </div>
+        </div>
+
+    </t>
+
+</templates>

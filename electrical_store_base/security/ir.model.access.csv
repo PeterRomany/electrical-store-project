@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+<!-- electrical.brand -->
+access_electrical_brand_cashier,electrical.brand cashier,model_electrical_brand,electrical_store_base.group_electrical_cashier,1,0,0,0
+access_electrical_brand_storekeeper,electrical.brand storekeeper,model_electrical_brand,electrical_store_base.group_electrical_storekeeper,1,1,0,0
+access_electrical_brand_accountant,electrical.brand accountant,model_electrical_brand,electrical_store_base.group_electrical_accountant,1,0,0,0
+access_electrical_brand_manager,electrical.brand manager,model_electrical_brand,electrical_store_base.group_electrical_manager,1,1,1,1
+
+<!-- product.packaging (extended) -->
+access_product_packaging_cashier,product.packaging cashier,product.model_product_packaging,electrical_store_base.group_electrical_cashier,1,0,0,0
+access_product_packaging_storekeeper,product.packaging storekeeper,product.model_product_packaging,electrical_store_base.group_electrical_storekeeper,1,1,1,0
+access_product_packaging_accountant,product.packaging accountant,product.model_product_packaging,electrical_store_base.group_electrical_accountant,1,0,0,0
+access_product_packaging_manager,product.packaging manager,product.model_product_packaging,electrical_store_base.group_electrical_manager,1,1,1,1

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+<!-- credit.warning.wizard -->
+access_credit_warning_wizard_cashier,credit.warning.wizard cashier,model_credit_warning_wizard,electrical_store_base.group_electrical_cashier,1,0,0,0
+access_credit_warning_wizard_storekeeper,credit.warning.wizard storekeeper,model_credit_warning_wizard,electrical_store_base.group_electrical_storekeeper,1,0,0,0
+access_credit_warning_wizard_accountant,credit.warning.wizard accountant,model_credit_warning_wizard,electrical_store_base.group_electrical_accountant,1,1,1,1
+access_credit_warning_wizard_manager,credit.warning.wizard manager,model_credit_warning_wizard,electrical_store_base.group_electrical_manager,1,1,1,1

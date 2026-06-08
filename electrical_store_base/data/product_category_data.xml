@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ================================================================
+             Root Category — Electrical Supplies
+             ================================================================ -->
+
+        <record id="product_category_electrical_root" model="product.category">
+            <field name="name">Electrical Supplies / مستلزمات كهربائية</field>
+            <field name="parent_id" ref="product.product_category_all"/>
+            <field name="property_cost_method">average</field>
+            <field name="property_valuation">real_time</field>
+        </record>
+
+        <!-- ================================================================
+             Sub-Categories
+             ================================================================ -->
+
+        <!-- Lamps & Lighting / لمبات وإضاءة -->
+        <record id="product_category_lamps" model="product.category">
+            <field name="name">Lamps &amp; Lighting / لمبات وإضاءة</field>
+            <field name="parent_id" ref="product_category_electrical_root"/>
+        </record>
+
+        <!-- Wires & Cables / أسلاك وكابلات -->
+        <record id="product_category_wires" model="product.category">
+            <field name="name">Wires &amp; Cables / أسلاك وكابلات</field>
+            <field name="parent_id" ref="product_category_electrical_root"/>
+        </record>
+
+        <!-- Switches & Sockets / أسكوينات ومقابس -->
+        <record id="product_category_switches" model="product.category">
+            <field name="name">Switches &amp; Sockets / أسكوينات ومقابس</field>
+            <field name="parent_id" ref="product_category_electrical_root"/>
+        </record>
+
+        <!-- Circuit Breakers & Panels / قواطع وتابلوهات -->
+        <record id="product_category_breakers" model="product.category">
+            <field name="name">Circuit Breakers &amp; Panels / قواطع وتابلوهات</field>
+            <field name="parent_id" ref="product_category_electrical_root"/>
+        </record>
+
+        <!-- Tools / أدوات -->
+        <record id="product_category_tools" model="product.category">
+            <field name="name">Tools / أدوات</field>
+            <field name="parent_id" ref="product_category_electrical_root"/>
+        </record>
+
+        <!-- Accessories & Fixings / إكسسوارات ومستلزمات -->
+        <record id="product_category_accessories" model="product.category">
+            <field name="name">Accessories &amp; Fixings / إكسسوارات ومستلزمات</field>
+            <field name="parent_id" ref="product_category_electrical_root"/>
+        </record>
+
+        <!-- Plugs & Connectors / قوابس وموصلات -->
+        <record id="product_category_plugs" model="product.category">
+            <field name="name">Plugs &amp; Connectors / قوابس وموصلات</field>
+            <field name="parent_id" ref="product_category_electrical_root"/>
+        </record>
+
+    </data>
+</odoo>

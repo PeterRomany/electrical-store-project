@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!--
+        ================================================================
+        UoM Category Strategy — Electrical Store
+        ================================================================
+
+        This module does NOT create new UoM categories.
+        It uses the following STANDARD Odoo UoM categories:
+
+        ┌─────────────────────────────────────────────────────────────┐
+        │ Category        │ Ext ID                      │ Used For    │
+        ├─────────────────────────────────────────────────────────────┤
+        │ Unit(s)         │ uom.product_uom_categ_unit  │ Piece       │
+        │                 │                             │ Box         │
+        │                 │                             │ Carton      │
+        │                 │                             │ Pack        │
+        ├─────────────────────────────────────────────────────────────┤
+        │ Length          │ uom.uom_categ_length        │ Meter       │
+        │                 │                             │ Roll        │
+        └─────────────────────────────────────────────────────────────┘
+
+        Conversion Rules:
+        ─────────────────
+        - 1 Box     = 120 Pieces  (factor = 1/120 = 0.008333)
+        - 1 Carton  =  48 Pieces  (factor = 1/48  = 0.020833)
+        - 1 Pack    =  12 Pieces  (factor = 1/12  = 0.083333)
+        - 1 Roll    = 100 Meters  (factor = 1/100 = 0.010000)
+
+        NOTE: Box/Carton/Pack quantities can also be set per product
+        using Product Packaging (product.packaging) for more granular
+        control when a specific product has a different box quantity.
+
+        New UoM records are defined in: uom_data.xml
+        ================================================================
+        -->
+
+    </data>
+</odoo>
