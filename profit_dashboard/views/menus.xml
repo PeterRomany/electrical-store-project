@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Profit Dashboard Menus
+         ================================================================ -->
+
+    <!-- Dashboard — Root menu item (first position) -->
+
+    <menuitem
+        id="menu_profit_dashboard"
+        name="📊 Dashboard / لوحة التحكم"
+        parent="electrical_store_base.menu_electrical_store_root"
+        action="action_profit_dashboard"
+        sequence="1"
+        groups="electrical_store_base.group_electrical_storekeeper,
+                electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager" />
+
+    <!-- Reports Sub-Menu -->
+
+    <menuitem
+        id="menu_electrical_reports"
+        name="Reports / التقارير"
+        parent="electrical_store_base.menu_electrical_store_root"
+        sequence="60"
+        groups="electrical_store_base.group_electrical_storekeeper,
+                electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager" />
+
+    <!-- Sales Report — standard Odoo -->
+    <menuitem
+        id="menu_electrical_sales_report"
+        name="Sales Report / تقرير المبيعات"
+        parent="menu_electrical_reports"
+        action="sale.action_order_report_all"
+        sequence="10"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager" />
+
+    <!-- Purchase Report — standard Odoo -->
+    <menuitem
+        id="menu_electrical_purchase_report"
+        name="Purchase Report / تقرير المشتريات"
+        parent="menu_electrical_reports"
+        action="purchase.purchase_report_action"
+        sequence="20"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager" />
+
+    <!-- Inventory Report — standard Odoo -->
+    <menuitem
+        id="menu_electrical_inventory_report"
+        name="Inventory Report / تقرير المخزون"
+        parent="menu_electrical_reports"
+        action="stock.action_stock_history"
+        sequence="30"
+        groups="electrical_store_base.group_electrical_storekeeper,
+                electrical_store_base.group_electrical_manager" />
+
+    <!-- POS Report — standard Odoo -->
+    <menuitem
+        id="menu_electrical_pos_report"
+        name="POS Report / تقرير نقطة البيع"
+        parent="menu_electrical_reports"
+        action="point_of_sale.action_pos_pos_form"
+        sequence="40"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager" />
+
+    <!-- Damage Report -->
+    <menuitem
+        id="menu_electrical_damage_report_shortcut"
+        name="Damage Report / تقرير التلف"
+        parent="menu_electrical_reports"
+        action="inventory_damage_management.action_damage_analysis_by_reason"
+        sequence="50"
+        groups="electrical_store_base.group_electrical_storekeeper,
+                electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager" />
+
+    <!-- Customer Statement Shortcut -->
+    <menuitem
+        id="menu_electrical_statement_report_shortcut"
+        name="Customer Statement / كشف حساب"
+        parent="menu_electrical_reports"
+        action="customer_statement.action_customer_statement_wizard"
+        sequence="60"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager" />
+
+</odoo>

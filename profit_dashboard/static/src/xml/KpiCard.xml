@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         KpiCard Template
+         Single KPI metric card with value, label, trend, and icon
+         ================================================================ -->
+
+    <t t-name="profit_dashboard.KpiCard">
+        <div t-att-class="cardClass"
+             t-on-click="onCardClick"
+             dir="rtl">
+
+            <!-- Loading State -->
+            <t t-if="props.loading">
+                <div style="text-align:center; padding:20px; color:#6c757d;">
+                    <i class="fa fa-spinner fa-spin fa-lg"/>
+                </div>
+            </t>
+
+            <t t-else="">
+
+                <!-- Icon -->
+                <div class="kpi-icon">
+                    <i t-att-class="'fa ' + (props.icon || 'fa-chart-bar')"/>
+                </div>
+
+                <!-- Label -->
+                <div class="kpi-label">
+                    <t t-if="props.labelAr">
+                        <t t-esc="props.labelAr"/>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="props.label"/>
+                    </t>
+                </div>
+
+                <!-- Value -->
+                <div class="kpi-value">
+                    <t t-esc="displayValue"/>
+                </div>
+
+                <!-- Sub Value -->
+                <div t-if="props.subValue"
+                     class="kpi-sub">
+                    <span t-esc="props.subValue"/>
+                </div>
+
+                <!-- Trend -->
+                <div t-if="hasTrend"
+                     style="margin-top:8px;">
+                    <span t-att-class="trendClass">
+                        <t t-esc="trendIcon"/>
+                        <t t-esc="trendDisplay"/>
+                        <t t-if="props.trendLabel">
+                            <span style="font-weight:400; margin-right:3px;">
+                                <t t-esc="props.trendLabel"/>
+                            </span>
+                        </t>
+                    </span>
+                </div>
+
+            </t>
+
+        </div>
+    </t>
+
+</templates>

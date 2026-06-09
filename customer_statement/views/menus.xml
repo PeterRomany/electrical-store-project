@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Customer Statement Menus
+         ================================================================ -->
+
+         <!-- Accounting Sub-Menu under Electrical Store root -->
+
+    <menuitem
+        id="menu_electrical_accounting"
+        name="Accounting / المحاسبة"
+        parent="electrical_store_base.menu_electrical_store_root"
+        sequence="50"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+         <!-- Customer Statements -->
+
+    <menuitem
+        id="menu_customer_statement"
+        name="Customer Statement / كشف حساب العميل"
+        parent="menu_electrical_accounting"
+        action="action_customer_statement_wizard"
+        sequence="10"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+         <!-- Quick Access: Customer Statement from Customers menu -->
+
+    <menuitem
+        id="menu_customer_statement_shortcut"
+        name="Account Statement / كشف الحساب"
+        parent="electrical_store_base.menu_electrical_customers"
+        action="action_customer_statement_wizard"
+        sequence="20"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+         <!-- Invoices — standard Odoo, exposed via our menu -->
+
+    <menuitem
+        id="menu_electrical_invoices"
+        name="Invoices / الفواتير"
+        parent="menu_electrical_accounting"
+        action="account.action_move_out_invoice_type"
+        sequence="20"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+         <!-- Payments — standard Odoo, exposed via our menu -->
+
+    <menuitem
+        id="menu_electrical_payments"
+        name="Payments / المدفوعات"
+        parent="menu_electrical_accounting"
+        action="account.action_account_payments"
+        sequence="30"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+         <!-- Aged Receivable Report — standard Odoo -->
+
+    <menuitem
+        id="menu_electrical_aged_receivable"
+        name="Aged Receivable / الذمم المدينة"
+        parent="menu_electrical_accounting"
+        action="account.action_aged_receivable_graph"
+        sequence="40"
+        groups="electrical_store_base.group_electrical_accountant,
+                electrical_store_base.group_electrical_manager"/>
+
+</odoo>

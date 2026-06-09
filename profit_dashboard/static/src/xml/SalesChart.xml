@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         SalesChart Template
+         Monthly sales trend bar chart — pure CSS, no external libs
+         ================================================================ -->
+
+    <t t-name="profit_dashboard.SalesChart">
+        <div class="dashboard-section" dir="rtl">
+
+            <!-- Section Header -->
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fa fa-bar-chart" style="color:#0d6efd;"/>
+                    اتجاه المبيعات الشهري
+                    <span style="color:#6c757d; font-size:12px; font-weight:400;">
+                        Monthly Sales Trend
+                    </span>
+                </div>
+                <div style="font-size:12px; color:#6c757d;">
+                    متوسط: <strong style="color:#0d6efd;"><t t-esc="averageLabel"/> ج.م</strong>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div t-if="props.loading"
+                 style="height:200px; display:flex; align-items:center; justify-content:center; color:#6c757d;">
+                <i class="fa fa-spinner fa-spin fa-2x"/>
+            </div>
+
+            <!-- No Data -->
+            <div t-elif="!props.data or props.data.length === 0"
+                 style="height:200px; display:flex; align-items:center; justify-content:center; color:#adb5bd; font-size:13px;">
+                <div style="text-align:center;">
+                    <i class="fa fa-bar-chart fa-3x mb-3" style="display:block; opacity:0.3;"/>
+                    لا توجد بيانات متاحة
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <t t-else="">
+                <div style="display:flex; gap:8px;">
+
+                    <!-- Y-Axis Labels -->
+                    <div style="
+                        display:flex;
+                        flex-direction:column;
+                        justify-content:space-between;
+                        font-size:9px;
+                        color:#adb5bd;
+                        padding-bottom:24px;
+                        text-align:left;
+                        width:36px;
+                        flex-shrink:0;
+                    ">
+                        <t t-foreach="yAxisLabels" t-as="ylabel" t-key="ylabel.pct">
+                            <span t-esc="ylabel.label"/>
+                        </t>
+                    </div>
+
+                    <!-- Bars Container -->
+                    <div style="flex:1; position:relative;">
+
+                        <!-- Horizontal Grid Lines -->
+                        <div style="
+                            position:absolute;
+                            inset:0;
+                            bottom:24px;
+                            display:flex;
+                            flex-direction:column;
+                            justify-content:space-between;
+                            pointer-events:none;
+                        ">
+                            <t t-foreach="yAxisLabels" t-as="ylabel" t-key="ylabel.pct">
+                                <div style="
+                                    border-top:1px dashed #f0f0f0;
+                                    width:100%;
+                                "/>
+                            </t>
+                        </div>
+
+                        <!-- Bars Row -->
+                        <div style="
+                            display:flex;
+                            align-items:flex-end;
+                            gap:6px;
+                            height:180px;
+                            padding:0 4px;
+                            border-bottom:2px solid #dee2e6;
+                        ">
+                            <t t-foreach="chartBars" t-as="bar" t-key="bar.index">
+                                <div class="chart-bar-wrapper"
+                                     t-on-mouseenter="() => this.onBarHover(bar.index)"
+                                     t-on-mouseleave="onBarLeave"
+                                     style="position:relative;">
+
+                                    <!-- Value Label (shown on hover) -->
+                                    <div t-if="bar.isHovered"
+                                         style="
+                                            position:absolute;
+                                            bottom:100%;
+                                            left:50%;
+                                            transform:translateX(-50%);
+                                            background:#212529;
+                                            color:#fff;
+                                            font-size:10px;
+                                            padding:3px 7px;
+                                            border-radius:4px;
+                                            white-space:nowrap;
+                                            z-index:10;
+                                            margin-bottom:4px;
+                                         ">
+                                        <t t-esc="formatCurrency(bar.sales)"/>
+                                    </div>
+
+                                    <!-- Bar -->
+                                    <div t-att-class="bar.isCurrent ? 'chart-bar current-month' : 'chart-bar past-month'"
+                                         t-att-style="'height:' + bar.heightPct + '%;'"
+                                         style="width:100%;"/>
+
+                                </div>
+                            </t>
+                        </div>
+
+                        <!-- X-Axis Labels -->
+                        <div style="
+                            display:flex;
+                            gap:6px;
+                            padding:6px 4px 0;
+                        ">
+                            <t t-foreach="chartBars" t-as="bar" t-key="bar.index">
+                                <div style="
+                                    flex:1;
+                                    text-align:center;
+                                    font-size:9px;
+                                    color:#6c757d;
+                                    line-height:1.2;
+                                "
+                                t-att-style="bar.isCurrent ? 'color:#0d6efd; font-weight:700;' : ''">
+                                    <t t-esc="bar.label_ar || bar.label"/>
+                                </div>
+                            </t>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Chart Legend -->
+                <div style="
+                    display:flex;
+                    gap:16px;
+                    justify-content:center;
+                    margin-top:12px;
+                    font-size:11px;
+                    color:#6c757d;
+                ">
+                    <div style="display:flex; align-items:center; gap:5px;">
+                        <div style="width:12px; height:12px; background:#0d6efd; border-radius:2px;"/>
+                        الشهر الحالي
+                    </div>
+                    <div style="display:flex; align-items:center; gap:5px;">
+                        <div style="width:12px; height:12px; background:#adb5bd; border-radius:2px;"/>
+                        الأشهر السابقة
+                    </div>
+                </div>
+
+            </t>
+
+        </div>
+    </t>
+
+</templates>

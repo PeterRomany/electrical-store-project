@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+<!-- profit.dashboard (abstract model — read only for all roles) -->
+access_profit_dashboard_storekeeper,profit.dashboard storekeeper,model_profit_dashboard,electrical_store_base.group_electrical_storekeeper,1,0,0,0
+access_profit_dashboard_accountant,profit.dashboard accountant,model_profit_dashboard,electrical_store_base.group_electrical_accountant,1,0,0,0
+access_profit_dashboard_manager,profit.dashboard manager,model_profit_dashboard,electrical_store_base.group_electrical_manager,1,0,0,0
