@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         DamageWidget Template
+         Damage summary with total value and breakdown by reason
+         ================================================================ -->
+
+    <t t-name="profit_dashboard.DamageWidget">
+        <div class="dashboard-section" dir="rtl">
+
+            <!-- Section Header -->
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fa fa-trash" style="color:#dc3545;"/>
+                    ملخص التلف والإتلاف
+                    <span style="color:#6c757d; font-size:12px; font-weight:400;">
+                        Damage Summary
+                    </span>
+                </div>
+                <button t-if="hasData"
+                        class="btn btn-sm btn-outline-danger"
+                        t-on-click="onWidgetClick"
+                        style="font-size:11px;">
+                    <i class="fa fa-external-link me-1"/>
+                    تفاصيل
+                </button>
+            </div>
+
+            <!-- Loading -->
+            <div t-if="props.loading"
+                 style="text-align:center; padding:32px; color:#6c757d;">
+                <i class="fa fa-spinner fa-spin fa-2x"/>
+            </div>
+
+            <!-- No Damage -->
+            <div t-elif="!hasData"
+                 style="
+                    text-align:center;
+                    padding:32px;
+                    color:#198754;
+                    font-size:13px;
+                 ">
+                <i class="fa fa-thumbs-up fa-3x mb-3"
+                   style="display:block; opacity:0.7;"/>
+                <strong>لا توجد حالات تلف في هذه الفترة ✅</strong>
+                <div style="color:#6c757d; font-size:12px; margin-top:4px;">
+                    No damage recorded in this period
+                </div>
+            </div>
+
+            <!-- Damage Data -->
+            <t t-elif="props.data">
+
+                <!-- Summary Cards Row -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+
+                    <!-- Total Value -->
+                    <div style="
+                        background:#f8d7da;
+                        border:1px solid #f1aeb5;
+                        border-radius:10px;
+                        padding:14px;
+                        text-align:center;
+                    ">
+                        <div style="
+                            font-size:20px;
+                            font-weight:700;
+                            color:#dc3545;
+                            line-height:1;
+                        ">
+                            <t t-esc="totalValueLabel"/>
+                        </div>
+                        <div style="font-size:11px; color:#6c757d; margin-top:5px;">
+                            إجمالي قيمة التلف
+                        </div>
+                    </div>
+
+                    <!-- Total Count -->
+                    <div style="
+                        background:#fff3cd;
+                        border:1px solid #ffda6a;
+                        border-radius:10px;
+                        padding:14px;
+                        text-align:center;
+                    ">
+                        <div style="
+                            font-size:28px;
+                            font-weight:700;
+                            color:#fd7e14;
+                            line-height:1;
+                        ">
+                            <t t-esc="totalCount"/>
+                        </div>
+                        <div style="font-size:11px; color:#6c757d; margin-top:5px;">
+                            عملية إتلاف
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- By Reason Breakdown -->
+                <div t-if="reasonsList.length > 0">
+
+                    <div style="
+                        font-size:12px;
+                        font-weight:700;
+                        color:#495057;
+                        margin-bottom:10px;
+                        padding-bottom:6px;
+                        border-bottom:1px solid #f0f0f0;
+                    ">
+                        <i class="fa fa-list me-1"/>
+                        التوزيع حسب السبب
+                    </div>
+
+                    <div class="damage-by-reason">
+                        <t t-foreach="reasonsList"
+                           t-as="reason"
+                           t-key="reason.reason">
+                            <div class="damage-reason-row">
+
+                                <!-- Reason Name -->
+                                <div style="flex:1; min-width:0;">
+                                    <div class="damage-reason-name"
+                                         style="
+                                            white-space:nowrap;
+                                            overflow:hidden;
+                                            text-overflow:ellipsis;
+                                            max-width:160px;
+                                         ">
+                                        <t t-esc="reason.reason"/>
+                                    </div>
+                                    <!-- Bar -->
+                                    <div style="
+                                        height:4px;
+                                        background:#f0f0f0;
+                                        border-radius:2px;
+                                        margin-top:4px;
+                                        overflow:hidden;
+                                    ">
+                                        <div t-att-style="
+                                            'width:' + getBarWidth(reason.value) +
+                                            '; height:100%;' +
+                                            ' background:' + getBarColor(reason_index) + ';' +
+                                            ' border-radius:2px;' +
+                                            ' transition:width 0.5s ease;'
+                                        "/>
+                                    </div>
+                                </div>
+
+                                <!-- Count + Value -->
+                                <div style="text-align:left; flex-shrink:0; margin-right:12px;">
+                                    <div class="damage-reason-value">
+                                        <t t-esc="formatCurrency(reason.value)"/>
+                                    </div>
+                                    <div style="font-size:10px; color:#6c757d; text-align:left;">
+                                        <t t-esc="reason.count"/> عملية
+                                    </div>
+                                </div>
+
+                            </div>
+                        </t>
+                    </div>
+
+                    <!-- Show More Reasons -->
+                    <div t-if="hasMoreReasons"
+                         style="text-align:center; margin-top:8px;">
+                        <button class="btn btn-sm btn-outline-secondary"
+                                t-on-click="toggleExpand"
+                                style="font-size:11px; width:100%;">
+                            <i class="fa fa-chevron-down me-1"/>
+                            عرض <t t-esc="remainingReasons"/> سبب آخر
+                        </button>
+                    </div>
+
+                    <!-- Show Less -->
+                    <div t-if="state.expanded and (props.data.by_reason or []).length > 4"
+                         style="text-align:center; margin-top:8px;">
+                        <button class="btn btn-sm btn-outline-secondary"
+                                t-on-click="toggleExpand"
+                                style="font-size:11px; width:100%;">
+                            <i class="fa fa-chevron-up me-1"/>
+                            عرض أقل
+                        </button>
+                    </div>
+
+                </div>
+
+            </t>
+
+        </div>
+    </t>
+
+</templates>

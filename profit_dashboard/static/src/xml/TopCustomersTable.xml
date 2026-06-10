@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         TopCustomersTable Template
+         Top customers ranked by revenue
+         ================================================================ -->
+
+    <t t-name="profit_dashboard.TopCustomersTable">
+        <div class="dashboard-section" dir="rtl">
+
+            <!-- Section Header -->
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fa fa-users" style="color:#6f42c1;"/>
+                    أفضل العملاء
+                    <span style="color:#6c757d; font-size:12px; font-weight:400;">
+                        Top Customers by Revenue
+                    </span>
+                </div>
+                <span t-if="props.customers and props.customers.length > 0"
+                      class="section-badge"
+                      style="background:#f3e8ff; color:#6f42c1;">
+                    <t t-esc="props.customers.length"/> عميل
+                </span>
+            </div>
+
+            <!-- Loading -->
+            <div t-if="props.loading"
+                 style="text-align:center; padding:40px; color:#6c757d;">
+                <i class="fa fa-spinner fa-spin fa-2x"/>
+            </div>
+
+            <!-- No Data -->
+            <div t-elif="!props.customers or props.customers.length === 0"
+                 style="text-align:center; padding:40px; color:#adb5bd; font-size:13px;">
+                <i class="fa fa-users fa-3x mb-3"
+                   style="display:block; opacity:0.3;"/>
+                لا توجد بيانات عملاء في هذه الفترة
+            </div>
+
+            <!-- Table -->
+            <t t-else="">
+                <table class="top-table">
+                    <thead>
+                        <tr>
+                            <th style="width:36px;">#</th>
+                            <th>العميل / Customer</th>
+                            <th style="width:90px;">النوع / Type</th>
+                            <th style="width:80px; cursor:pointer;"
+                                t-on-click="() => this.sortBy('order_count')">
+                                الطلبات
+                                <i t-att-class="'fa ' + getSortIcon('order_count')"
+                                   style="margin-right:4px; font-size:10px;"/>
+                            </th>
+                            <th style="width:120px; cursor:pointer;"
+                                t-on-click="() => this.sortBy('revenue')">
+                                الإيراد
+                                <i t-att-class="'fa ' + getSortIcon('revenue')"
+                                   style="margin-right:4px; font-size:10px;"/>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="sortedCustomers"
+                           t-as="customer"
+                           t-key="customer.id">
+                            <tr t-on-click="() => this.onCustomerClick(customer)"
+                                style="cursor:pointer;">
+
+                                <!-- Rank -->
+                                <td>
+                                    <span t-att-class="getRankClass(customer_index)">
+                                        <t t-esc="customer_index + 1"/>
+                                    </span>
+                                </td>
+
+                                <!-- Customer Name + Revenue Bar -->
+                                <td>
+                                    <div class="product-name">
+                                        <t t-esc="customer.name"/>
+                                    </div>
+                                    <div t-if="customer.phone"
+                                         style="font-size:10px; color:#adb5bd; margin-top:2px;">
+                                        <i class="fa fa-phone me-1"/>
+                                        <t t-esc="customer.phone"/>
+                                    </div>
+                                    <!-- Revenue bar -->
+                                    <div style="
+                                        height:3px;
+                                        background:#e9ecef;
+                                        border-radius:2px;
+                                        margin-top:5px;
+                                        overflow:hidden;
+                                    ">
+                                        <div style="
+                                            height:100%;
+                                            background:linear-gradient(90deg, #6f42c1, #a98eda);
+                                            border-radius:2px;
+                                            transition:width 0.5s ease;
+                                        "
+                                        t-att-style="'width:' + getRevenueBarWidth(customer.revenue)"/>
+                                    </div>
+                                </td>
+
+                                <!-- Customer Type Badge -->
+                                <td>
+                                    <span t-att-class="getTypeClass(customer.customer_type)">
+                                        <t t-esc="getTypeLabel(customer.customer_type)"/>
+                                    </span>
+                                </td>
+
+                                <!-- Order Count -->
+                                <td style="text-align:center; font-weight:600; color:#495057;">
+                                    <t t-esc="customer.order_count || 0"/>
+                                </td>
+
+                                <!-- Revenue -->
+                                <td class="revenue-value"
+                                    style="color:#6f42c1;">
+                                    <t t-esc="formatCurrency(customer.revenue)"/>
+                                </td>
+
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+
+        </div>
+    </t>
+
+</templates>

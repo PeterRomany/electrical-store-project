@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         TopProductsTable Template
+         Top selling products ranked by revenue
+         ================================================================ -->
+
+    <t t-name="profit_dashboard.TopProductsTable">
+        <div class="dashboard-section" dir="rtl">
+
+            <!-- Section Header -->
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fa fa-trophy" style="color:#ffd700;"/>
+                    أفضل المنتجات مبيعاً
+                    <span style="color:#6c757d; font-size:12px; font-weight:400;">
+                        Top Products by Revenue
+                    </span>
+                </div>
+                <span t-if="props.products and props.products.length > 0"
+                      class="section-badge">
+                    <t t-esc="props.products.length"/> منتج
+                </span>
+            </div>
+
+            <!-- Loading -->
+            <div t-if="props.loading"
+                 style="text-align:center; padding:40px; color:#6c757d;">
+                <i class="fa fa-spinner fa-spin fa-2x"/>
+            </div>
+
+            <!-- No Data -->
+            <div t-elif="!props.products or props.products.length === 0"
+                 style="text-align:center; padding:40px; color:#adb5bd; font-size:13px;">
+                <i class="fa fa-inbox fa-3x mb-3" style="display:block; opacity:0.3;"/>
+                لا توجد بيانات مبيعات في هذه الفترة
+            </div>
+
+            <!-- Table -->
+            <t t-else="">
+                <table class="top-table">
+                    <thead>
+                        <tr>
+                            <th style="width:36px;">#</th>
+                            <th>
+                                المنتج / Product
+                            </th>
+                            <th style="width:80px; cursor:pointer;"
+                                t-on-click="() => this.sortBy('qty')">
+                                الكمية
+                                <i t-att-class="'fa ' + getSortIcon('qty')"
+                                   style="margin-right:4px; font-size:10px;"/>
+                            </th>
+                            <th style="width:110px; cursor:pointer;"
+                                t-on-click="() => this.sortBy('revenue')">
+                                الإيراد
+                                <i t-att-class="'fa ' + getSortIcon('revenue')"
+                                   style="margin-right:4px; font-size:10px;"/>
+                            </th>
+                            <th style="width:70px; cursor:pointer;"
+                                t-on-click="() => this.sortBy('margin_pct')">
+                                الهامش
+                                <i t-att-class="'fa ' + getSortIcon('margin_pct')"
+                                   style="margin-right:4px; font-size:10px;"/>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="sortedProducts" t-as="product" t-key="product.id">
+                            <tr t-on-click="() => this.onProductClick(product)"
+                                style="cursor:pointer;">
+
+                                <!-- Rank -->
+                                <td>
+                                    <span t-att-class="getRankClass(product_index)">
+                                        <t t-esc="product_index + 1"/>
+                                    </span>
+                                </td>
+
+                                <!-- Product Name + Brand + Revenue Bar -->
+                                <td>
+                                    <div class="product-name">
+                                        <t t-esc="product.name"/>
+                                    </div>
+                                    <div style="display:flex; align-items:center; gap:6px; margin-top:3px;">
+                                        <span t-if="product.brand"
+                                              class="brand-tag">
+                                            <t t-esc="product.brand"/>
+                                        </span>
+                                        <span style="font-size:10px; color:#adb5bd;">
+                                            <t t-esc="product.category"/>
+                                        </span>
+                                    </div>
+                                    <!-- Revenue bar -->
+                                    <div style="
+                                        height:3px;
+                                        background:#e9ecef;
+                                        border-radius:2px;
+                                        margin-top:5px;
+                                        overflow:hidden;
+                                    ">
+                                        <div style="
+                                            height:100%;
+                                            background:linear-gradient(90deg, #0d6efd, #6ea8fe);
+                                            border-radius:2px;
+                                            transition:width 0.5s ease;
+                                        "
+                                        t-att-style="'width:' + getRevenueBarWidth(product.revenue)"/>
+                                    </div>
+                                </td>
+
+                                <!-- Qty -->
+                                <td style="text-align:center; color:#495057;">
+                                    <t t-esc="formatQty(product.qty)"/>
+                                </td>
+
+                                <!-- Revenue -->
+                                <td class="revenue-value">
+                                    <t t-esc="formatCurrency(product.revenue)"/>
+                                </td>
+
+                                <!-- Margin -->
+                                <td>
+                                    <span t-att-class="getMarginClass(product.margin_pct)">
+                                        <t t-esc="(product.margin_pct || 0).toFixed(1)"/>٪
+                                    </span>
+                                </td>
+
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+
+        </div>
+    </t>
+
+</templates>

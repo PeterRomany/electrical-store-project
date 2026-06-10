@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         LowStockAlert Template
+         Products with low or zero stock
+         ================================================================ -->
+
+    <t t-name="profit_dashboard.LowStockAlert">
+        <div class="dashboard-section" dir="rtl">
+
+            <!-- Section Header -->
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fa fa-exclamation-triangle"
+                       style="color:#ffc107;"/>
+                    تنبيهات المخزون
+                    <span style="color:#6c757d; font-size:12px; font-weight:400;">
+                        Low Stock Alerts
+                    </span>
+                </div>
+                <div style="display:flex; gap:6px; align-items:center;">
+                    <!-- Zero Stock Badge -->
+                    <span t-if="zeroCount > 0"
+                          style="
+                            background:#f8d7da;
+                            color:#58151c;
+                            font-size:11px;
+                            font-weight:700;
+                            padding:2px 8px;
+                            border-radius:12px;
+                          ">
+                        <i class="fa fa-times-circle me-1"/>
+                        <t t-esc="zeroCount"/> نفذ
+                    </span>
+                    <!-- Low Stock Badge -->
+                    <span t-if="lowCount > 0"
+                          style="
+                            background:#fff3cd;
+                            color:#664d03;
+                            font-size:11px;
+                            font-weight:700;
+                            padding:2px 8px;
+                            border-radius:12px;
+                          ">
+                        <i class="fa fa-warning me-1"/>
+                        <t t-esc="lowCount"/> منخفض
+                    </span>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div t-if="props.loading"
+                 style="text-align:center; padding:32px; color:#6c757d;">
+                <i class="fa fa-spinner fa-spin fa-2x"/>
+            </div>
+
+            <!-- No Alerts -->
+            <div t-elif="totalCount === 0"
+                 style="
+                    text-align:center;
+                    padding:32px;
+                    color:#198754;
+                    font-size:13px;
+                 ">
+                <i class="fa fa-check-circle fa-3x mb-3"
+                   style="display:block; color:#198754; opacity:0.7;"/>
+                <strong>كل المنتجات متوفرة ✅</strong>
+                <div style="color:#6c757d; font-size:12px; margin-top:4px;">
+                    All products are in stock
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <t t-elif="true">
+                <div style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
+                    <button t-att-class="getFilterClass('all')"
+                            t-on-click="() => this.setFilter('all')"
+                            style="font-size:11px;">
+                        الكل (<t t-esc="totalCount"/>)
+                    </button>
+                    <button t-if="zeroCount > 0"
+                            t-att-class="getFilterClass('zero')"
+                            t-on-click="() => this.setFilter('zero')"
+                            style="font-size:11px;">
+                        نفذ من المخزن (<t t-esc="zeroCount"/>)
+                    </button>
+                    <button t-if="lowCount > 0"
+                            t-att-class="getFilterClass('low')"
+                            t-on-click="() => this.setFilter('low')"
+                            style="font-size:11px;">
+                        كمية منخفضة (<t t-esc="lowCount"/>)
+                    </button>
+                </div>
+
+                <!-- Items List -->
+                <div class="low-stock-list">
+                    <t t-foreach="displayItems" t-as="item" t-key="item.id">
+                        <div t-att-class="getItemClass(item)"
+                             t-on-click="() => this.onItemClick(item)"
+                             style="cursor:pointer;">
+
+                            <!-- Item Info -->
+                            <div style="flex:1; min-width:0;">
+                                <div class="item-name">
+                                    <t t-esc="item.name"/>
+                                </div>
+                                <div style="display:flex; gap:8px; margin-top:3px; flex-wrap:wrap;">
+                                    <span t-if="item.default_code"
+                                          class="item-code">
+                                        <i class="fa fa-hashtag me-1"/>
+                                        <t t-esc="item.default_code"/>
+                                    </span>
+                                    <span t-if="item.brand"
+                                          style="font-size:10px; color:#0d6efd;">
+                                        <t t-esc="item.brand"/>
+                                    </span>
+                                    <span t-if="item.shelf"
+                                          class="item-shelf">
+                                        <i class="fa fa-map-marker me-1"/>
+                                        <t t-esc="item.shelf"/>
+                                    </span>
+                                </div>
+                                <div style="font-size:10px; color:#adb5bd; margin-top:2px;">
+                                    <t t-esc="item.category"/>
+                                </div>
+                            </div>
+
+                            <!-- Stock Badge -->
+                            <div style="flex-shrink:0; margin-right:10px;">
+                                <span t-att-class="getStockBadgeClass(item)">
+                                    <t t-esc="getStockLabel(item)"/>
+                                </span>
+                            </div>
+
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Show More Button -->
+                <div t-if="hasMore"
+                     style="text-align:center; margin-top:10px;">
+                    <button class="btn btn-sm btn-outline-secondary"
+                            t-on-click="toggleShowAll"
+                            style="font-size:12px; width:100%;">
+                        <i class="fa fa-chevron-down me-1"/>
+                        عرض <t t-esc="remainingCount"/> منتج آخر
+                    </button>
+                </div>
+
+                <!-- Show Less Button -->
+                <div t-if="state.showAll and totalCount > 8"
+                     style="text-align:center; margin-top:10px;">
+                    <button class="btn btn-sm btn-outline-secondary"
+                            t-on-click="toggleShowAll"
+                            style="font-size:12px; width:100%;">
+                        <i class="fa fa-chevron-up me-1"/>
+                        عرض أقل
+                    </button>
+                </div>
+
+            </t>
+
+        </div>
+    </t>
+
+</templates>

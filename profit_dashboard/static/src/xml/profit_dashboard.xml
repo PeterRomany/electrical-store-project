@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ================================================================
+         ProfitDashboard Main Template
+         Main OWL client action dashboard layout
+         ================================================================ -->
+
+    <t t-name="profit_dashboard.ProfitDashboard">
+        <div class="profit-dashboard" dir="rtl">
+
+            <!-- ============================================================
+                 Loading State
+                 ============================================================ -->
+            <div t-if="state.loading" class="dashboard-loading">
+                <div class="spinner"/>
+                <div class="loading-text">
+                    جاري تحميل لوحة التحكم...
+                    <div style="font-size:12px; color:#adb5bd; margin-top:4px;">
+                        Loading Dashboard
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 Error State
+                 ============================================================ -->
+            <div t-elif="state.error" class="dashboard-error">
+                <div class="error-icon">⚠️</div>
+                <div style="font-size:18px; font-weight:700;">
+                    تعذر تحميل البيانات
+                </div>
+                <div class="error-message">
+                    <t t-esc="state.error"/>
+                </div>
+                <button class="btn btn-primary mt-3"
+                        t-on-click="onRefresh">
+                    <i class="fa fa-refresh me-2"/>
+                    إعادة المحاولة
+                </button>
+            </div>
+
+            <!-- ============================================================
+                 Dashboard Content
+                 ============================================================ -->
+            <t t-else="">
+
+                     <!-- Dashboard Header -->
+                <div class="dashboard-header">
+
+                    <!-- Title -->
+                    <div>
+                        <div class="dashboard-title">
+                            <span class="title-icon">📊</span>
+                            لوحة الربحية
+                            <span style="font-size:14px; color:#6c757d; font-weight:400;">
+                                Profit Dashboard
+                            </span>
+                        </div>
+                        <div class="dashboard-subtitle">
+                            <t t-esc="periodLabel"/>
+                            <span t-if="state.lastRefresh"
+                                  style="margin-right:12px;">
+                                <span class="refresh-dot"
+                                      style="display:inline-block; margin-left:4px;"/>
+                                آخر تحديث: <t t-esc="state.lastRefresh"/>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+
+                        <!-- Quick Period Buttons -->
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    t-on-click="setToday"
+                                    style="font-size:11px;">
+                                اليوم
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary"
+                                    t-on-click="setThisMonth"
+                                    style="font-size:11px;">
+                                هذا الشهر
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    t-on-click="setLast30Days"
+                                    style="font-size:11px;">
+                                30 يوم
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    t-on-click="setThisYear"
+                                    style="font-size:11px;">
+                                هذا العام
+                            </button>
+                        </div>
+
+                        <!-- Date Range Selector -->
+                        <div class="dashboard-date-selector">
+                            <label style="font-size:11px; color:#6c757d; white-space:nowrap;">
+                                من:
+                            </label>
+                            <input type="date"
+                                   t-att-value="state.dateFrom"
+                                   t-on-change="onDateFromChange"/>
+                            <label style="font-size:11px; color:#6c757d; white-space:nowrap;">
+                                إلى:
+                            </label>
+                            <input type="date"
+                                   t-att-value="state.dateTo"
+                                   t-on-change="onDateToChange"/>
+                            <button class="btn-refresh"
+                                    t-on-click="onDateChange">
+                                <i class="fa fa-search"/>
+                            </button>
+                        </div>
+
+                        <!-- Refresh Button -->
+                        <button class="btn btn-sm btn-outline-secondary"
+                                t-on-click="onRefresh"
+                                t-att-disabled="state.refreshing"
+                                style="font-size:11px;">
+                            <i t-att-class="'fa fa-refresh ' + (state.refreshing ? 'fa-spin' : '')"/>
+                            <span style="margin-right:4px;">
+                                <t t-if="state.refreshing">جاري التحديث...</t>
+                                <t t-else="">تحديث</t>
+                            </span>
+                        </button>
+
+                    </div>
+                </div>
+
+                     <!-- KPI Cards Row -->
+                <div class="dashboard-grid">
+
+                    <!-- Daily Sales -->
+                    <KpiCard
+                        label="Daily Sales"
+                        labelAr="مبيعات اليوم"
+                        t-att-value="formatCurrencyFull(kpis.daily_sales)"
+                        icon="fa-sun-o"
+                        colorClass="kpi-primary"
+                        t-att-subValue="(kpis.pos_count || 0) + ' طلب POS اليوم'"
+                        t-att-onClick="() => this.onDrilldown('pos', null)"
+                    />
+
+                    <!-- Period Sales -->
+                    <KpiCard
+                        label="Period Sales"
+                        labelAr="مبيعات الفترة"
+                        t-att-value="formatCurrencyFull(kpis.period_sales)"
+                        icon="fa-shopping-cart"
+                        colorClass="kpi-success"
+                        t-att-trendValue="kpis.growth_pct"
+                        trendLabel="مقارنة بالفترة السابقة"
+                        t-att-onClick="() => this.onDrilldown('pos', null)"
+                    />
+
+                    <!-- Gross Profit -->
+                    <KpiCard
+                        label="Gross Profit"
+                        labelAr="الربح الإجمالي"
+                        t-att-value="formatCurrencyFull(kpis.gross_profit)"
+                        icon="fa-money"
+                        colorClass="kpi-warning"
+                        t-att-subValue="(kpis.gross_profit_pct || 0).toFixed(1) + '٪ هامش الربح'"
+                    />
+
+                    <!-- Total Orders -->
+                    <KpiCard
+                        label="Total Orders"
+                        labelAr="إجمالي الطلبات"
+                        t-att-value="(kpis.total_orders || 0).toString()"
+                        icon="fa-file-text-o"
+                        colorClass="kpi-info"
+                        t-att-subValue="(kpis.so_count || 0) + ' أوامر بيع + ' + (kpis.pos_count || 0) + ' POS'"
+                    />
+
+                    <!-- Purchase Cost -->
+                    <KpiCard
+                        label="Purchase Cost"
+                        labelAr="تكلفة المشتريات"
+                        t-att-value="formatCurrencyFull(kpis.purchase_cost)"
+                        icon="fa-truck"
+                        colorClass="kpi-purple"
+                        subValue="المشتريات المعتمدة"
+                    />
+
+                    <!-- Damaged Value -->
+                    <KpiCard
+                        label="Damage Value"
+                        labelAr="قيمة التلف"
+                        t-att-value="formatCurrencyFull(damageData ? damageData.total_value : 0)"
+                        icon="fa-trash"
+                        colorClass="kpi-danger"
+                        t-att-subValue="(damageData ? damageData.total_count : 0) + ' عملية إتلاف'"
+                        t-att-onClick="() => this.onDrilldown('damage', null)"
+                    />
+
+                    <!-- Low Stock Count -->
+                    <KpiCard
+                        label="Low Stock Items"
+                        labelAr="منتجات منخفضة المخزون"
+                        t-att-value="lowStockItems.length.toString()"
+                        icon="fa-exclamation-triangle"
+                        colorClass="kpi-warning"
+                        t-att-subValue="lowStockItems.filter(i => i.is_zero).length + ' نفذ من المخزن'"
+                        t-att-onClick="() => this.onDrilldown('product', null)"
+                    />
+
+                    <!-- POS Sessions -->
+                    <KpiCard
+                        label="POS Sessions"
+                        labelAr="جلسات نقطة البيع"
+                        t-att-value="(posSummary.open_sessions || 0).toString()"
+                        icon="fa-desktop"
+                        colorClass="kpi-info"
+                        t-att-subValue="'جلسة مفتوحة — ' + (posSummary.today_orders || 0) + ' طلب اليوم'"
+                        t-att-onClick="() => this.onDrilldown('pos', null)"
+                    />
+
+                </div>
+
+                     <!-- Sales Chart + Customer Types Row -->
+                <div class="dashboard-grid grid-2">
+
+                    <!-- Monthly Sales Trend -->
+                    <SalesChart
+                        t-att-data="monthlyTrend"
+                        t-att-loading="state.refreshing"
+                    />
+
+                    <!-- Sales by Customer Type -->
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <i class="fa fa-pie-chart" style="color:#fd7e14;"/>
+                                المبيعات حسب نوع العميل
+                                <span style="color:#6c757d; font-size:12px; font-weight:400;">
+                                    By Customer Type
+                                </span>
+                            </div>
+                        </div>
+
+                        <div t-if="state.refreshing"
+                             style="text-align:center; padding:32px; color:#6c757d;">
+                            <i class="fa fa-spinner fa-spin fa-2x"/>
+                        </div>
+
+                        <div t-elif="byCustomerType.length === 0"
+                             style="text-align:center; padding:32px; color:#adb5bd; font-size:13px;">
+                            لا توجد بيانات
+                        </div>
+
+                        <div t-else="" class="customer-type-bars">
+                            <t t-foreach="byCustomerType"
+                               t-as="typeItem"
+                               t-key="typeItem.type">
+                                <div class="type-bar-row">
+                                    <div class="type-bar-label">
+                                        <t t-esc="typeItem.label.split(' / ')[0]"/>
+                                    </div>
+                                    <div class="type-bar-track">
+                                        <div t-att-class="'type-bar-fill ' + typeItem.type"
+                                             t-att-style="'width:' + getTypeBarWidth(typeItem.revenue)"/>
+                                    </div>
+                                    <div class="type-bar-pct">
+                                        <t t-esc="typeItem.pct.toFixed(0)"/>٪
+                                    </div>
+                                    <div style="font-size:11px; color:#495057; font-weight:600; min-width:80px; text-align:left;">
+                                        <t t-esc="formatCurrencyFull(typeItem.revenue)"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                     <!-- Top Products + Top Customers Row -->
+                <div class="dashboard-grid grid-2">
+
+                    <TopProductsTable
+                        t-att-products="topProducts"
+                        t-att-loading="state.refreshing"
+                        t-att-onDrilldown="(type, id) => this.onDrilldown(type, id)"
+                    />
+
+                    <TopCustomersTable
+                        t-att-customers="topCustomers"
+                        t-att-loading="state.refreshing"
+                        t-att-onDrilldown="(type, id) => this.onDrilldown(type, id)"
+                    />
+
+                </div>
+
+                     <!-- Low Stock + Damage Row -->
+                <div class="dashboard-grid grid-2">
+
+                    <LowStockAlert
+                        t-att-items="lowStockItems"
+                        t-att-loading="state.refreshing"
+                        t-att-onDrilldown="(type, id) => this.onDrilldown(type, id)"
+                    />
+
+                    <DamageWidget
+                        t-att-data="damageData"
+                        t-att-loading="state.refreshing"
+                        t-att-onDrilldown="(type, id) => this.onDrilldown(type, id)"
+                    />
+
+                </div>
+
+                     <!-- POS Summary Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fa fa-desktop" style="color:#0dcaf0;"/>
+                            ملخص نقطة البيع — اليوم
+                            <span style="color:#6c757d; font-size:12px; font-weight:400;">
+                                POS Summary — Today
+                            </span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-info"
+                                t-on-click="() => this.onDrilldown('pos', null)"
+                                style="font-size:11px;">
+                            <i class="fa fa-external-link me-1"/>
+                            عرض التفاصيل
+                        </button>
+                    </div>
+
+                    <div class="pos-summary-grid">
+                        <div class="pos-stat-card">
+                            <div class="pos-stat-value" style="color:#198754;">
+                                <t t-esc="posSummary.open_sessions || 0"/>
+                            </div>
+                            <div class="pos-stat-label">
+                                <i class="fa fa-circle" style="color:#198754; font-size:8px; margin-left:4px;"/>
+                                جلسات مفتوحة
+                            </div>
+                        </div>
+                        <div class="pos-stat-card">
+                            <div class="pos-stat-value">
+                                <t t-esc="posSummary.today_orders || 0"/>
+                            </div>
+                            <div class="pos-stat-label">طلبات اليوم</div>
+                        </div>
+                        <div class="pos-stat-card">
+                            <div class="pos-stat-value" style="color:#198754; font-size:16px;">
+                                <t t-esc="formatCurrencyFull(posSummary.today_revenue || 0)"/>
+                            </div>
+                            <div class="pos-stat-label">إيراد POS اليوم</div>
+                        </div>
+                    </div>
+                </div>
+
+                     <!-- Footer -->
+                <div style="
+                    text-align:center;
+                    padding:16px;
+                    font-size:11px;
+                    color:#adb5bd;
+                    margin-top:8px;
+                ">
+                    <div class="refresh-indicator" style="justify-content:center;">
+                        <div class="refresh-dot"/>
+                        يتجدد تلقائياً كل 5 دقائق — Auto-refreshes every 5 minutes
+                    </div>
+                    <div style="margin-top:4px;">
+                        Electrical Store ERP — Odoo 18 Community
+                    </div>
+                </div>
+
+            </t>
+
+        </div>
+    </t>
+
+</templates>
