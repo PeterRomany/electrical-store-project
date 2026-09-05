@@ -18,13 +18,7 @@
                 <div class="alert alert-danger mb-1 py-2 px-3"
                     role="alert"
                     style="direction:rtl;"
-                    attrs="{
-                         'invisible': [
-                             '|',
-                             ('partner_credit_status', '!=', 'blocked'),
-                             ('partner_id', '=', False)
-                         ]
-                     }">
+                    invisible="partner_credit_status != 'blocked' or not partner_id">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span> 🚫 <strong>العميل محظور — Credit Blocked</strong> — تجاوز الحد
                             الائتماني المسموح به. يلزم موافقة المدير لتأكيد هذا الطلب. </span>
@@ -33,7 +27,7 @@
                             string="طلب تجاوز المدير"
                             class="btn btn-sm btn-danger"
                             groups="electrical_store_base.group_electrical_manager"
-                            attrs="{'invisible': [('state', 'not in', ('draft', 'sent'))]}" />
+                            invisible="state not in ['draft', 'sent']" />
                     </div>
                 </div>
 
@@ -41,13 +35,7 @@
                 <div class="alert alert-warning mb-1 py-2 px-3"
                     role="alert"
                     style="direction:rtl;"
-                    attrs="{
-                         'invisible': [
-                             '|',
-                             ('partner_credit_status', '!=', 'warning'),
-                             ('partner_id', '=', False)
-                         ]
-                     }">
+                    invisible="partner_credit_status != 'warning' or not partner_id">
                     ⚠️ <strong>تحذير ائتماني — Credit Warning</strong> — العميل اقترب من الحد
                     الائتماني. </div>
 
@@ -57,27 +45,23 @@
             </field>
 
             <!-- Credit Override Info — shown in chatter area if override exists -->
-            <field name="credit_override_reason" position="after">
+            <xpath expr="(//field[@name='partner_id'])[1]" position="after">
+                <field name="credit_override_reason" invisible="1"/>
                 <field name="credit_override_user_id"
                     readonly="1"
-                    attrs="{'invisible': [('credit_override_user_id', '=', False)]}"
-                    groups="electrical_store_base.group_electrical_accountant,
-                               electrical_store_base.group_electrical_manager" />
-            </field>
+                    invisible="not credit_override_user_id"
+                    groups="electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager" />
+            </xpath>
 
             <!-- Add Credit Summary to Other Info tab -->
             <page name="other_information" position="inside">
                 <separator string="Credit Info / معلومات الائتمان"
-                    attrs="{'invisible': [('partner_id', '=', False)]}"
-                    groups="electrical_store_base.group_electrical_accountant,
-                                   electrical_store_base.group_electrical_manager" />
+                    invisible="not partner_id"
+                    groups="electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager" />
 
                 <group
-                    attrs="{
-                           'invisible': [('partner_id', '=', False)]
-                       }"
-                    groups="electrical_store_base.group_electrical_accountant,
-                               electrical_store_base.group_electrical_manager">
+                    invisible="not partner_id"
+                    groups="electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager">
 
                     <group string="Customer Credit / ائتمان العميل">
                         <field name="partner_credit_status"
@@ -101,7 +85,7 @@
                     </group>
 
                     <group string="Override Info / معلومات التجاوز"
-                        attrs="{'invisible': [('credit_override_reason', '=', False)]}">
+                        invisible="not credit_override_reason">
                         <field name="credit_override_reason"
                             readonly="1"
                             string="Override Reason / سبب التجاوز" />
@@ -134,8 +118,7 @@
                     decoration-danger="partner_credit_status == 'blocked'"
                     decoration-warning="partner_credit_status == 'warning'"
                     decoration-success="partner_credit_status == 'ok'"
-                    groups="electrical_store_base.group_electrical_accountant,
-                               electrical_store_base.group_electrical_manager" />
+                    groups="electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager" />
             </field>
 
         </field>
@@ -151,18 +134,16 @@
         <field name="inherit_id" ref="sale.view_sales_order_filter" />
         <field name="arch" type="xml">
 
-            <filter name="my_sale" position="after">
+            <filter name="my_sale_orders_filter" position="after">
                 <separator />
                 <filter name="filter_credit_blocked"
                     string="Credit Blocked Orders / طلبات محظورة"
                     domain="[('partner_credit_status', '=', 'blocked')]"
-                    groups="electrical_store_base.group_electrical_accountant,
-                                electrical_store_base.group_electrical_manager" />
+                    groups="electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager" />
                 <filter name="filter_credit_warning"
                     string="Credit Warning Orders / طلبات تحذير"
                     domain="[('partner_credit_status', '=', 'warning')]"
-                    groups="electrical_store_base.group_electrical_accountant,
-                                electrical_store_base.group_electrical_manager" />
+                    groups="electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager" />
                 <filter name="filter_credit_override"
                     string="Credit Overridden / تم التجاوز"
                     domain="[('credit_override_reason', '!=', False)]"

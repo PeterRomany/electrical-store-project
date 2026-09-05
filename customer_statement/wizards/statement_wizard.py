@@ -24,6 +24,31 @@ class CustomerStatementWizard(models.TransientModel):
         domain=[('customer_rank', '>', 0)],
         help='Select the customer to generate the statement for.',
     )
+    partner_credit_limit = fields.Float(
+        related='partner_id.credit_limit',
+        string='Credit Limit / Ø§Ù„Ø­Ø¯ Ø§Ù„Ø§Ø¦ØªÙ…Ø§Ù†ÙŠ',
+        readonly=True,
+    )
+    partner_credit_used = fields.Float(
+        related='partner_id.credit_used',
+        string='Credit Used / Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…',
+        readonly=True,
+    )
+    partner_credit_available = fields.Float(
+        related='partner_id.credit_available',
+        string='Credit Available / Ø§Ù„Ù…ØªØ§Ø­',
+        readonly=True,
+    )
+    partner_credit_status = fields.Selection(
+        related='partner_id.credit_status',
+        string='Credit Status / Ø­Ø§Ù„Ø© Ø§Ù„Ø§Ø¦ØªÙ…Ø§Ù†',
+        readonly=True,
+    )
+    partner_customer_type = fields.Selection(
+        related='partner_id.customer_type',
+        string='Customer Type / Ù†ÙˆØ¹ Ø§Ù„Ø¹Ù…ÙŠÙ„',
+        readonly=True,
+    )
     date_from = fields.Date(
         string='From Date / من تاريخ',
         required=True,

@@ -11,12 +11,12 @@ class ResPartner(models.Model):
 
     customer_type = fields.Selection(
         selection=[
-            ('retail',      'Retail / تجزئة'),
-            ('electrician', 'Electrician / كهربائي'),
-            ('contractor',  'Contractor / مقاول'),
-            ('company',     'Company / شركة'),
+            ('retail',      'تجزئة'),
+            ('electrician', 'كهربائي'),
+            ('contractor',  'مقاول'),
+            ('company',     'شركة'),
         ],
-        string='Customer Type / نوع العميل',
+        string='نوع العميل',
         default='retail',
         index=True,
         tracking=True,

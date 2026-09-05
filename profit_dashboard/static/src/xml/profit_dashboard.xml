@@ -17,7 +17,6 @@
                 <div class="loading-text">
                     جاري تحميل لوحة التحكم...
                     <div style="font-size:12px; color:#adb5bd; margin-top:4px;">
-                        Loading Dashboard
                     </div>
                 </div>
             </div>
@@ -54,7 +53,6 @@
                             <span class="title-icon">📊</span>
                             لوحة الربحية
                             <span style="font-size:14px; color:#6c757d; font-weight:400;">
-                                Profit Dashboard
                             </span>
                         </div>
                         <div class="dashboard-subtitle">
@@ -237,7 +235,6 @@
                                 <i class="fa fa-pie-chart" style="color:#fd7e14;"/>
                                 المبيعات حسب نوع العميل
                                 <span style="color:#6c757d; font-size:12px; font-weight:400;">
-                                    By Customer Type
                                 </span>
                             </div>
                         </div>
@@ -319,7 +316,6 @@
                             <i class="fa fa-desktop" style="color:#0dcaf0;"/>
                             ملخص نقطة البيع — اليوم
                             <span style="color:#6c757d; font-size:12px; font-weight:400;">
-                                POS Summary — Today
                             </span>
                         </div>
                         <button class="btn btn-sm btn-outline-info"
@@ -365,10 +361,10 @@
                 ">
                     <div class="refresh-indicator" style="justify-content:center;">
                         <div class="refresh-dot"/>
-                        يتجدد تلقائياً كل 5 دقائق — Auto-refreshes every 5 minutes
+                        يتجدد تلقائياً كل 5 دقائق
                     </div>
                     <div style="margin-top:4px;">
-                        Electrical Store ERP — Odoo 18 Community
+                        نظام محل الكهرباء
                     </div>
                 </div>
 

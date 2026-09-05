@@ -1,9 +1,9 @@
 /** @odoo-module **/
 
 import { Component, useState, onWillStart } from "@odoo/owl";
+import { Dialog } from "@web/core/dialog/dialog";
 import { useService } from "@web/core/utils/hooks";
 import { usePos } from "@point_of_sale/app/store/pos_hook";
-import { AbstractAwaitablePopup } from "@point_of_sale/app/popup/abstract_awaitable_popup";
 
 // =============================================================================
 // ProductInfoPopup Component
@@ -11,17 +11,19 @@ import { AbstractAwaitablePopup } from "@point_of_sale/app/popup/abstract_awaita
 // Displays: stock, brand, watt, voltage, warranty, shelf, alias, packaging
 // =============================================================================
 
-export class ProductInfoPopup extends AbstractAwaitablePopup {
+export class ProductInfoPopup extends Component {
     static template = "electrical_pos_custom.ProductInfoPopup";
+    static components = { Dialog };
 
     static props = {
-        ...AbstractAwaitablePopup.props,
         product:     { type: Object },
         productInfo: { type: Object, optional: true },
+        title:       { type: String, optional: true },
+        getPayload:  { type: Function },
+        close:       { type: Function },
     };
 
     static defaultProps = {
-        ...AbstractAwaitablePopup.defaultProps,
         title:       'معلومات المنتج',
         productInfo: null,
     };
@@ -31,7 +33,6 @@ export class ProductInfoPopup extends AbstractAwaitablePopup {
     // -------------------------------------------------------------------------
 
     setup() {
-        super.setup();
         this.pos          = usePos();
         this.orm          = useService("orm");
         this.notification = useService("notification");
@@ -238,18 +239,20 @@ export class ProductInfoPopup extends AbstractAwaitablePopup {
      * Close popup — no selection made.
      */
     cancel() {
-        this.props.close({ confirmed: false });
+        this.props.getPayload({ confirmed: false });
+        this.props.close();
     }
 
     /**
      * Confirm: add product to order using base unit.
      */
     confirm() {
-        this.props.close({
+        this.props.getPayload({
             confirmed:    true,
             product:      this.props.product,
             packaging:    null,
         });
+        this.props.close();
     }
 
     /**
@@ -257,10 +260,11 @@ export class ProductInfoPopup extends AbstractAwaitablePopup {
      * @param {object} packaging
      */
     selectPackaging(packaging) {
-        this.props.close({
+        this.props.getPayload({
             confirmed: true,
             product:   this.props.product,
             packaging: packaging,
         });
+        this.props.close();
     }
 }

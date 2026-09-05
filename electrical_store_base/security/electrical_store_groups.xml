@@ -7,7 +7,7 @@
              ================================================================ -->
 
         <record id="module_category_electrical_store" model="ir.module.category">
-            <field name="name">Electrical Store / محل كهرباء</field>
+            <field name="name">محل الكهرباء</field>
             <field name="description">
                 Access rights for the Electrical Supplies Store ERP system.
             </field>
@@ -19,7 +19,7 @@
              ================================================================ -->
 
         <record id="group_electrical_cashier" model="res.groups">
-            <field name="name">Cashier / كاشير</field>
+            <field name="name">كاشير</field>
             <field name="category_id" ref="module_category_electrical_store"/>
             <field name="implied_ids" eval="[
                 (4, ref('point_of_sale.group_pos_user')),
@@ -36,7 +36,7 @@
              ================================================================ -->
 
         <record id="group_electrical_storekeeper" model="res.groups">
-            <field name="name">Store Keeper / أمين المخزن</field>
+            <field name="name">أمين المخزن</field>
             <field name="category_id" ref="module_category_electrical_store"/>
             <field name="implied_ids" eval="[
                 (4, ref('stock.group_stock_user')),
@@ -53,7 +53,7 @@
              ================================================================ -->
 
         <record id="group_electrical_accountant" model="res.groups">
-            <field name="name">Accountant / محاسب</field>
+            <field name="name">محاسب</field>
             <field name="category_id" ref="module_category_electrical_store"/>
             <field name="implied_ids" eval="[
                 (4, ref('account.group_account_user')),
@@ -70,7 +70,7 @@
              ================================================================ -->
 
         <record id="group_electrical_manager" model="res.groups">
-            <field name="name">Manager / مدير</field>
+            <field name="name">مدير المحل</field>
             <field name="category_id" ref="module_category_electrical_store"/>
             <field name="implied_ids" eval="[
                 (4, ref('electrical_store_base.group_electrical_cashier')),

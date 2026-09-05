@@ -28,7 +28,7 @@
 
                 <!-- Reported By -->
                 <field name="reported_by_id"
-                       readonly="1"
+                       readonly="state != 'draft'"
                        string="Reported By / بواسطة"/>
 
             </field>
@@ -71,8 +71,7 @@
                        string="Damage Value / قيمة التلف"
                        widget="monetary"
                        optional="show"
-                       groups="electrical_store_base.group_electrical_accountant,
-                               electrical_store_base.group_electrical_manager"/>
+                       groups="electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager"/>
                 <field name="reported_by_id"
                        string="Reported By / بواسطة"
                        optional="hide"/>
@@ -100,7 +99,7 @@
             </field>
 
             <!-- Damage Filters -->
-            <filter name="filter_draft" position="after">
+            <xpath expr="//search/field[@name='create_date']" position="after">
                 <separator/>
                 <filter name="filter_has_damage_reason"
                         string="With Damage Reason / له سبب تلف"
@@ -121,10 +120,10 @@
                 <filter name="filter_damage_return"
                         string="Return Damage / تلف مرتجعات"
                         domain="[('damage_reason_id.code', '=', 'RET')]"/>
-            </filter>
+            </xpath>
 
             <!-- Group By -->
-            <group expand="0" string="Group By" position="inside">
+            <xpath expr="//search/group" position="inside">
                 <filter name="group_by_damage_reason"
                         string="Damage Reason / سبب التلف"
                         context="{'group_by': 'damage_reason_id'}"/>
@@ -137,7 +136,7 @@
                 <filter name="group_by_date"
                         string="Date / التاريخ"
                         context="{'group_by': 'date_done:month'}"/>
-            </group>
+            </xpath>
 
         </field>
     </record>

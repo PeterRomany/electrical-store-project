@@ -10,7 +10,7 @@ class ResPartner(models.Model):
     # -------------------------------------------------------------------------
 
     credit_limit = fields.Float(
-        string='Credit Limit / الحد الائتماني',
+        string='الحد الائتماني',
         default=0.0,
         digits=(16, 2),
         tracking=True,
@@ -20,7 +20,7 @@ class ResPartner(models.Model):
                'electrical_store_base.group_electrical_manager',
     )
     warning_threshold = fields.Float(
-        string='Warning Threshold (%) / نسبة التحذير',
+        string='نسبة التحذير (%)',
         default=80.0,
         digits=(5, 2),
         help='Show warning when credit usage reaches this percentage.\n'
@@ -29,7 +29,7 @@ class ResPartner(models.Model):
                'electrical_store_base.group_electrical_manager',
     )
     blocking_threshold = fields.Float(
-        string='Blocking Threshold (%) / نسبة الحظر',
+        string='نسبة الحظر (%)',
         default=100.0,
         digits=(5, 2),
         help='Block sales when credit usage reaches this percentage.\n'
@@ -43,21 +43,21 @@ class ResPartner(models.Model):
     # -------------------------------------------------------------------------
 
     credit_used = fields.Float(
-        string='Credit Used / الرصيد المستخدم',
+        string='الرصيد المستخدم',
         compute='_compute_credit_status',
         store=False,
         digits=(16, 2),
         help='Total outstanding unpaid invoiced amount for this customer.',
     )
     credit_available = fields.Float(
-        string='Credit Available / الرصيد المتاح',
+        string='الرصيد المتاح',
         compute='_compute_credit_status',
         store=False,
         digits=(16, 2),
         help='Remaining credit available: Credit Limit - Credit Used.',
     )
     credit_usage_pct = fields.Float(
-        string='Credit Usage (%) / نسبة الاستخدام',
+        string='نسبة استخدام الائتمان (%)',
         compute='_compute_credit_status',
         store=False,
         digits=(5, 2),
@@ -65,14 +65,15 @@ class ResPartner(models.Model):
     )
     credit_status = fields.Selection(
         selection=[
-            ('ok',      'OK / جيد'),
-            ('warning', 'Warning / تحذير'),
-            ('blocked', 'Blocked / محظور'),
+            ('ok',      'جيد'),
+            ('warning', 'تحذير'),
+            ('blocked', 'محظور'),
         ],
-        string='Credit Status / حالة الائتمان',
+        string='حالة الائتمان',
         compute='_compute_credit_status',
         store=False,
         help='Current credit status based on usage vs thresholds.',
+        search='_search_credit_status',
     )
 
     # -------------------------------------------------------------------------
@@ -134,6 +135,30 @@ class ResPartner(models.Model):
                     partner.credit_status = 'warning'
                 else:
                     partner.credit_status = 'ok'
+
+    def _search_credit_status(self, operator, value):
+        """Search the live, non-stored credit status field.
+
+        Credit status is computed from current outstanding invoices, so it is
+        intentionally not stored and needs a custom search implementation.
+        """
+        partners = self.search([])
+        partners._compute_credit_status()
+
+        if operator in ('=', '=='):
+            matching = partners.filtered(lambda p: p.credit_status == value)
+        elif operator == '!=':
+            matching = partners.filtered(lambda p: p.credit_status != value)
+        elif operator == 'in':
+            values = set(value or [])
+            matching = partners.filtered(lambda p: p.credit_status in values)
+        elif operator == 'not in':
+            values = set(value or [])
+            matching = partners.filtered(lambda p: p.credit_status not in values)
+        else:
+            return [('id', '=', False)]
+
+        return [('id', 'in', matching.ids)]
 
     # -------------------------------------------------------------------------
     # SQL Constraints

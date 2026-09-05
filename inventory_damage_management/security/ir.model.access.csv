@@ -1,12 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
-<!-- damage.reason -->
 access_damage_reason_cashier,damage.reason cashier,model_damage_reason,electrical_store_base.group_electrical_cashier,1,0,0,0
 access_damage_reason_storekeeper,damage.reason storekeeper,model_damage_reason,electrical_store_base.group_electrical_storekeeper,1,0,0,0
 access_damage_reason_accountant,damage.reason accountant,model_damage_reason,electrical_store_base.group_electrical_accountant,1,0,0,0
 access_damage_reason_manager,damage.reason manager,model_damage_reason,electrical_store_base.group_electrical_manager,1,1,1,1
 
-<!-- stock.scrap (extended fields — base access already in stock module) -->
 access_stock_scrap_cashier,stock.scrap cashier,stock.model_stock_scrap,electrical_store_base.group_electrical_cashier,1,0,0,0
 access_stock_scrap_storekeeper,stock.scrap storekeeper,stock.model_stock_scrap,electrical_store_base.group_electrical_storekeeper,1,1,1,0
 access_stock_scrap_accountant,stock.scrap accountant,stock.model_stock_scrap,electrical_store_base.group_electrical_accountant,1,0,0,0

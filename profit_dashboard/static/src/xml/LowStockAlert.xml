@@ -16,7 +16,6 @@
                        style="color:#ffc107;"/>
                     تنبيهات المخزون
                     <span style="color:#6c757d; font-size:12px; font-weight:400;">
-                        Low Stock Alerts
                     </span>
                 </div>
                 <div style="display:flex; gap:6px; align-items:center;">
@@ -67,7 +66,6 @@
                    style="display:block; color:#198754; opacity:0.7;"/>
                 <strong>كل المنتجات متوفرة ✅</strong>
                 <div style="color:#6c757d; font-size:12px; margin-top:4px;">
-                    All products are in stock
                 </div>
             </div>
 

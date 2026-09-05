@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="demo_product_led_9w" model="product.template">
+            <field name="image_1920" type="base64" file="electrical_store_demo/static/src/img/demo_led_9w.png"/>
+        </record>
+
+        <record id="demo_product_led_12w" model="product.template">
+            <field name="image_1920" type="base64" file="electrical_store_demo/static/src/img/demo_led_12w.png"/>
+        </record>
+
+        <record id="demo_product_wire_2mm" model="product.template">
+            <field name="image_1920" type="base64" file="electrical_store_demo/static/src/img/demo_wire_2mm.png"/>
+        </record>
+
+        <record id="demo_product_switch" model="product.template">
+            <field name="image_1920" type="base64" file="electrical_store_demo/static/src/img/demo_switch.png"/>
+        </record>
+
+        <record id="demo_product_breaker" model="product.template">
+            <field name="image_1920" type="base64" file="electrical_store_demo/static/src/img/demo_breaker.png"/>
+        </record>
+    </data>
+</odoo>

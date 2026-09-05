@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Inventory Damage Management',
+    'name': 'تسجيل تلف المخزون',
     'version': '18.0.1.0.0',
     'category': 'Inventory/Damage',
     'summary': 'Damage reason tracking, reports, and statistics for scrap operations',
@@ -45,11 +45,13 @@
         'views/damage_reason_views.xml',
         'views/stock_scrap_views.xml',
         'views/damage_report_views.xml',
-        'views/menus.xml',
 
         # Reports
         'report/damage_report_action.xml',
         'report/damage_report_template.xml',
+
+        # Menus depend on the report action above
+        'views/menus.xml',
     ],
     'installable': True,
     'auto_install': False,

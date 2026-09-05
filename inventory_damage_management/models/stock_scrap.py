@@ -12,17 +12,17 @@ class StockScrap(models.Model):
 
     damage_reason_id = fields.Many2one(
         comodel_name='damage.reason',
-        string='Damage Reason / سبب التلف',
+        string='سبب التلف',
         index=True,
         tracking=True,
         help='Reason why this product is being scrapped/damaged.',
     )
     damage_notes = fields.Text(
-        string='Damage Notes / ملاحظات التلف',
+        string='ملاحظات التلف',
         help='Additional details about the damage.',
     )
     damage_value = fields.Float(
-        string='Damage Value / قيمة التلف',
+        string='قيمة التلف',
         compute='_compute_damage_value',
         store=True,
         digits=(16, 2),
@@ -41,8 +41,6 @@ class StockScrap(models.Model):
         string='Reported By / بواسطة',
         default=lambda self: self.env.user,
         tracking=True,
-        readonly=True,
-        states={'draft': [('readonly', False)]},
     )
 
     # -------------------------------------------------------------------------

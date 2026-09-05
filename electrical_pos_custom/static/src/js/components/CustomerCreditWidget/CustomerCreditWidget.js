@@ -3,7 +3,6 @@
 import { Component, useState, onWillUpdateProps } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { usePos } from "@point_of_sale/app/store/pos_hook";
-import { formatCurrency } from "@point_of_sale/app/utils/format_currency";
 
 // =============================================================================
 // CustomerCreditWidget Component
@@ -249,8 +248,7 @@ export class CustomerCreditWidget extends Component {
      */
     _formatAmount(amount) {
         try {
-            const currency = this.pos.currency;
-            return formatCurrency(amount, currency);
+            return this.env.utils.formatCurrency(amount);
         } catch {
             return `${(amount || 0).toFixed(2)} ج.م`;
         }

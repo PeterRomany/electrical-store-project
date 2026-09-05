@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Profit Dashboard',
+    'name': 'لوحة متابعة المحل',
     'version': '18.0.1.0.0',
     'category': 'Reporting/Dashboard',
     'summary': 'Real-time profit and performance dashboard for electrical store',
@@ -36,6 +36,7 @@
     'depends': [
         'electrical_store_base',
         'customer_credit_limit',
+        'customer_statement',
         'inventory_damage_management',
         'sale_management',
         'purchase',
@@ -64,7 +65,7 @@
             'profit_dashboard/static/src/js/components/KpiCard/KpiCard.js',
             'profit_dashboard/static/src/js/components/SalesChart/SalesChart.js',
             'profit_dashboard/static/src/js/components/TopProductsTable/TopProductsTable.js',
-            'profit_dashboard/static/src/js/components/TopCustomersTable/TopCustomersTable.js',
+            'profit_dashboard/static/src/js/components/TopProductsTable/TopCustomersTable.js',
             'profit_dashboard/static/src/js/components/LowStockAlert/LowStockAlert.js',
             'profit_dashboard/static/src/js/components/DamageWidget/DamageWidget.js',
 

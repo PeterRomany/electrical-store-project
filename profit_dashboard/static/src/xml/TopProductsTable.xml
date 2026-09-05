@@ -15,7 +15,6 @@
                     <i class="fa fa-trophy" style="color:#ffd700;"/>
                     أفضل المنتجات مبيعاً
                     <span style="color:#6c757d; font-size:12px; font-weight:400;">
-                        Top Products by Revenue
                     </span>
                 </div>
                 <span t-if="props.products and props.products.length > 0"

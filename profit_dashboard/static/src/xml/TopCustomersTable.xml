@@ -15,7 +15,6 @@
                     <i class="fa fa-users" style="color:#6f42c1;"/>
                     أفضل العملاء
                     <span style="color:#6c757d; font-size:12px; font-weight:400;">
-                        Top Customers by Revenue
                     </span>
                 </div>
                 <span t-if="props.customers and props.customers.length > 0"

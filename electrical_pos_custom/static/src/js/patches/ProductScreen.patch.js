@@ -4,11 +4,17 @@ import { patch } from "@web/core/utils/patch";
 import { ProductScreen } from "@point_of_sale/app/screens/product_screen/product_screen";
 import { useService } from "@web/core/utils/hooks";
 import { usePos } from "@point_of_sale/app/store/pos_hook";
+import { makeAwaitable } from "@point_of_sale/app/store/make_awaitable_dialog";
 import { useState } from "@odoo/owl";
-import { ArabicSearchBar } from "@electrical_pos_custom/js/components/ArabicSearchBar/ArabicSearchBar";
 import { ElectricalProductCard } from "@electrical_pos_custom/js/components/ElectricalProductCard/ElectricalProductCard";
 import { ProductInfoPopup } from "@electrical_pos_custom/js/components/ProductInfoPopup/ProductInfoPopup";
-import { PackagingSelectorPopup } from "@electrical_pos_custom/js/components/PackagingSelectorPopup/PackagingSelectorPopup";
+import { PackagingSelectorPopup } from "@electrical_pos_custom/js/components/ProductInfoPopup/PackagingSelectorPopup";
+
+// The inherited POS template uses this component directly.
+ProductScreen.components = {
+    ...ProductScreen.components,
+    ElectricalProductCard,
+};
 
 // =============================================================================
 // ProductScreen Patch
@@ -30,7 +36,7 @@ patch(ProductScreen.prototype, {
         super.setup();
 
         this.pos          = usePos();
-        this.popup        = useService("popup");
+        this.dialog       = useService("dialog");
         this.notification = useService("notification");
 
         this.electricalState = useState({
@@ -55,6 +61,7 @@ patch(ProductScreen.prototype, {
         this.electricalState.searchTerm      = term;
         this.electricalState.filteredProducts = results;
         this.electricalState.isFiltered       = term.length > 0;
+        this.pos.searchProductWord = term;
     },
 
     /**
@@ -71,6 +78,23 @@ patch(ProductScreen.prototype, {
         return this.pos.models['product.product']?.getAll()?.filter(
             p => p.available_in_pos
         ) || [];
+    },
+
+    // Extend the native POS search so the normal top search field also finds
+    // aliases and Arabic keywords loaded by electrical_product_model.js.
+    getProductsBySearchWord(searchWord) {
+        const products = this.pos.selectedCategory?.id
+            ? this.getProductsByCategory(this.pos.selectedCategory)
+            : this.products;
+        const term = (searchWord || '').trim();
+        const filteredProducts = products.filter((product) =>
+            typeof product.matchesSearch === 'function'
+                ? product.matchesSearch(term)
+                : true
+        );
+        return filteredProducts.sort((a, b) =>
+            (a.display_name || '').localeCompare(b.display_name || '')
+        );
     },
 
     /**
@@ -133,7 +157,7 @@ patch(ProductScreen.prototype, {
         }
 
         // Standard add to order
-        this._addProductToOrder(product, 1, null);
+        await this._addProductToOrder(product, 1, null);
     },
 
     /**
@@ -145,7 +169,8 @@ patch(ProductScreen.prototype, {
     async onProductInfoClick(product) {
         if (!product) return;
 
-        const { confirmed, packaging } = await this.popup.add(
+        const result = await makeAwaitable(
+            this.dialog,
             ProductInfoPopup,
             {
                 product: product,
@@ -153,11 +178,12 @@ patch(ProductScreen.prototype, {
             }
         );
 
-        if (confirmed) {
+        if (result?.confirmed) {
+            const { packaging } = result;
             if (packaging && !packaging.is_base) {
-                this._addProductToOrder(product, packaging.qty, packaging);
+                await this._addProductToOrder(product, packaging.qty, packaging);
             } else {
-                this._addProductToOrder(product, 1, null);
+                await this._addProductToOrder(product, 1, null);
             }
         }
     },
@@ -182,7 +208,8 @@ patch(ProductScreen.prototype, {
      * @param {object} product
      */
     async _openPackagingSelector(product) {
-        const result = await this.popup.add(
+        const result = await makeAwaitable(
+            this.dialog,
             PackagingSelectorPopup,
             {
                 product:    product,
@@ -191,8 +218,8 @@ patch(ProductScreen.prototype, {
             }
         );
 
-        if (result.confirmed) {
-            this._addProductToOrder(
+        if (result?.confirmed) {
+            await this._addProductToOrder(
                 result.product,
                 result.baseQty,
                 result.packaging,
@@ -212,19 +239,18 @@ patch(ProductScreen.prototype, {
      * @param {number}      qty       — quantity in BASE units
      * @param {object|null} packaging — selected packaging option (for display)
      */
-    _addProductToOrder(product, qty, packaging) {
+    async _addProductToOrder(product, qty, packaging) {
         if (!product || qty <= 0) return;
 
         const order = this.pos.get_order();
         if (!order) return;
 
         try {
-            // Use standard POS method to add product
-            order.add_product(product, {
-                quantity: qty,
-                extras: packaging
-                    ? { packaging_id: packaging.id || false }
-                    : {},
+            // Odoo 18 adds products through the POS store API.
+            // Packaging is represented by its converted base quantity.
+            await this.pos.addLineToCurrentOrder({
+                product_id: product,
+                qty,
             });
 
             // Show notification for packaging selection

@@ -13,13 +13,13 @@
 
             <!-- Add Electrical Info notebook page -->
             <notebook position="inside">
-                <page string="Electrical Info / معلومات كهربائية"
+                <page string="معلومات المنتج الكهربائي"
                       name="electrical_info">
 
                     <group>
 
                         <!-- Left column: Specifications -->
-                        <group string="Specifications / المواصفات">
+                        <group string="المواصفات">
                             <field name="brand_id"
                                    options="{'no_create': False,
                                              'no_create_edit': False}"/>
@@ -29,7 +29,7 @@
                         </group>
 
                         <!-- Right column: Store Info -->
-                        <group string="Store Info / معلومات المحل">
+                        <group string="معلومات المحل">
                             <field name="shelf_location"/>
                             <field name="product_alias"/>
                         </group>
@@ -37,7 +37,7 @@
                     </group>
 
                     <!-- Arabic Keywords — full width -->
-                    <group string="Arabic Search Keywords / كلمات البحث العربية">
+                    <group string="كلمات البحث العربية">
                         <field name="arabic_keywords"
                                nolabel="1"
                                placeholder="أدخل الكلمات العربية للبحث مفصولة بمسافات — مثال: لمبة ليد توفير طاقة"/>
@@ -61,19 +61,19 @@
 
             <field name="categ_id" position="after">
                 <field name="brand_id"
-                       string="Brand / الماركة"
+                       string="الماركة"
                        optional="show"/>
                 <field name="watt"
-                       string="Watt / واط"
+                       string="الواط"
                        optional="hide"/>
                 <field name="voltage"
-                       string="Voltage / جهد"
+                       string="الجهد"
                        optional="hide"/>
                 <field name="shelf_location"
-                       string="Shelf / الرف"
+                       string="الرف"
                        optional="show"/>
                 <field name="product_alias"
-                       string="Alias / الاسم الشائع"
+                       string="الاسم الشائع"
                        optional="hide"/>
             </field>
 
@@ -93,44 +93,44 @@
             <!-- Extra search fields -->
             <field name="name" position="after">
                 <field name="brand_id"
-                       string="Brand / الماركة"/>
+                       string="الماركة"/>
                 <field name="product_alias"
-                       string="Alias / الاسم الشائع"
+                       string="الاسم الشائع"
                        filter_domain="[('product_alias', 'ilike', self)]"/>
                 <field name="arabic_keywords"
-                       string="Arabic Keywords / كلمات عربية"
+                       string="كلمات عربية"
                        filter_domain="[('arabic_keywords', 'ilike', self)]"/>
                 <field name="shelf_location"
-                       string="Shelf / الرف"
+                       string="الرف"
                        filter_domain="[('shelf_location', 'ilike', self)]"/>
             </field>
 
             <!-- Extra filters -->
-            <filter name="filter_available" position="after">
+            <filter name="inactive" position="after">
                 <separator/>
                 <filter name="filter_has_brand"
-                        string="Has Brand / له ماركة"
+                        string="له ماركة"
                         domain="[('brand_id', '!=', False)]"/>
                 <filter name="filter_no_brand"
-                        string="No Brand / بدون ماركة"
+                        string="بدون ماركة"
                         domain="[('brand_id', '=', False)]"/>
                 <filter name="filter_has_warranty"
-                        string="Has Warranty / له ضمان"
+                        string="له ضمان"
                         domain="[('warranty_months', '>', 0)]"/>
             </filter>
 
             <!-- Group By -->
-            <group expand="0" string="Group By" position="inside">
+            <xpath expr="//search/group" position="inside">
                 <filter name="group_by_brand"
-                        string="Brand / الماركة"
+                        string="الماركة"
                         context="{'group_by': 'brand_id'}"/>
                 <filter name="group_by_categ"
-                        string="Category / الفئة"
+                        string="الفئة"
                         context="{'group_by': 'categ_id'}"/>
                 <filter name="group_by_shelf"
-                        string="Shelf Location / الرف"
+                        string="موقع الرف"
                         context="{'group_by': 'shelf_location'}"/>
-            </group>
+            </xpath>
 
         </field>
     </record>

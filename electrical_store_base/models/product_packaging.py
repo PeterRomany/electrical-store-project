@@ -12,20 +12,20 @@ class ProductPackaging(models.Model):
 
     packaging_type = fields.Selection(
         selection=[
-            ('piece',   'Piece / قطعة'),
-            ('box',     'Box / كرتونة'),
-            ('carton',  'Carton / كرتون'),
-            ('pack',    'Pack / باكيت'),
-            ('meter',   'Meter / متر'),
-            ('roll',    'Roll / لفة'),
+            ('piece',   'قطعة'),
+            ('box',     'كرتونة'),
+            ('carton',  'كرتون'),
+            ('pack',    'باكيت'),
+            ('meter',   'متر'),
+            ('roll',    'لفة'),
         ],
-        string='Packaging Type / نوع التعبئة',
+        string='نوع التعبئة',
         index=True,
         help='Defines the packaging unit type for POS unit selection.',
     )
 
     arabic_name = fields.Char(
-        string='Arabic Name / الاسم بالعربية',
+        string='الاسم بالعربية',
         size=64,
         help='Arabic display name shown in POS unit selector.',
     )

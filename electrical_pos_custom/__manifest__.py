@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Electrical Store POS',
+    'name': 'كاشير محل الكهرباء',
     'version': '18.0.1.0.0',
     'category': 'Point of Sale/Electrical',
     'summary': 'POS extensions for electrical supplies store (Egypt)',
@@ -28,6 +28,7 @@
     'website': '',
     'depends': [
         'electrical_store_base',
+        'customer_credit_limit',
         'point_of_sale',
         'stock',
         'account',
@@ -48,7 +49,7 @@
             'electrical_pos_custom/static/src/js/components/ArabicSearchBar/ArabicSearchBar.js',
             'electrical_pos_custom/static/src/js/components/CustomerCreditWidget/CustomerCreditWidget.js',
             'electrical_pos_custom/static/src/js/components/ProductInfoPopup/ProductInfoPopup.js',
-            'electrical_pos_custom/static/src/js/components/PackagingSelectorPopup/PackagingSelectorPopup.js',
+            'electrical_pos_custom/static/src/js/components/ProductInfoPopup/PackagingSelectorPopup.js',
             'electrical_pos_custom/static/src/js/components/ElectricalProductCard/ElectricalProductCard.js',
 
             # JS — Patches (extend existing POS components)
@@ -62,6 +63,7 @@
             'electrical_pos_custom/static/src/xml/ProductInfoPopup.xml',
             'electrical_pos_custom/static/src/xml/PackagingSelectorPopup.xml',
             'electrical_pos_custom/static/src/xml/ElectricalProductCard.xml',
+            'electrical_pos_custom/static/src/xml/pos_overrides.xml',
         ],
     },
     'installable': True,

@@ -6,6 +6,7 @@ import { useService } from "@web/core/utils/hooks";
 import { usePos } from "@point_of_sale/app/store/pos_hook";
 import { useState } from "@odoo/owl";
 import { CustomerCreditWidget } from "@electrical_pos_custom/js/components/CustomerCreditWidget/CustomerCreditWidget";
+import { ask } from "@point_of_sale/app/store/make_awaitable_dialog";
 
 // =============================================================================
 // PartnerList Patch
@@ -29,6 +30,7 @@ patch(PartnerList.prototype, {
         this.pos          = usePos();
         this.orm          = useService("orm");
         this.notification = useService("notification");
+        this.dialog       = useService("dialog");
 
         this.partnerState = useState({
             searchTerm:         '',
@@ -80,6 +82,15 @@ patch(PartnerList.prototype, {
 
             return searchable.includes(lterm);
         });
+    },
+
+    // Keep the standard partner dialog, but make its local search understand
+    // Arabic aliases and customer types already loaded in the POS session.
+    getPartners() {
+        const term = this.state.query || this.partnerState.searchTerm || '';
+        return this.getFilteredPartners(term)
+            .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+            .slice(0, 1000);
     },
 
     /**
@@ -186,13 +197,13 @@ patch(PartnerList.prototype, {
         const isBlocked  = creditInfo?.credit_status === 'blocked';
 
         if (isBlocked && this.pos.config?.iface_credit_warning) {
-            const { confirmed } = await this.popup.add('ConfirmPopup', {
+        const confirmed = await ask(this.dialog, {
                 title:       '🚫 عميل محظور',
                 body:
                     `العميل ${partner.name} تجاوز الحد الائتماني.\n` +
                     `هل تريد الاستمرار؟ (يلزم موافقة المدير عند الدفع)`,
-                confirmText: 'استمرار مع التحذير',
-                cancelText:  'اختيار عميل آخر',
+            confirmLabel: 'استمرار مع التحذير',
+            cancelLabel:  'اختيار عميل آخر',
             });
 
             if (!confirmed) return;
@@ -201,14 +212,15 @@ patch(PartnerList.prototype, {
         // Apply partner to order using standard method
         this.props.partner = partner;
         this.pos.get_order()?.set_partner(partner);
-        this.props.close({ confirmed: true, payload: partner });
+        this.props.getPayload(partner);
+        this.props.close();
     },
 
     /**
      * Cancel partner selection.
      */
     cancelPartnerSelection() {
-        this.props.close({ confirmed: false });
+        this.props.close();
     },
 
     // -------------------------------------------------------------------------

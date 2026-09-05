@@ -1,0 +1,31 @@
+/* واجهة محل الكهرباء — إعدادات مريحة للمستخدم كبير السن */
+
+.o_web_client {
+    font-size: 15px;
+}
+
+.o_web_client .btn {
+    min-height: 38px;
+    font-size: 15px;
+}
+
+.o_web_client .o_form_view .o_form_label,
+.o_web_client .o_list_view .o_list_table th,
+.o_web_client .o_list_view .o_list_table td {
+    font-size: 15px;
+}
+
+.o_web_client .o_form_view .o_field_widget input,
+.o_web_client .o_form_view .o_field_widget textarea,
+.o_web_client .o_form_view .o_field_widget select {
+    min-height: 38px;
+    font-size: 15px;
+}
+
+.o_web_client .o_menu_sections .o_menu_entry_lvl_1 {
+    font-size: 16px;
+}
+
+.o_web_client .o_form_view .alert {
+    font-size: 15px;
+}

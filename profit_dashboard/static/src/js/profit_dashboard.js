@@ -3,12 +3,13 @@
 import { Component, useState, onWillStart, onWillUnmount, useRef } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { registry } from "@web/core/registry";
+import { rpc } from "@web/core/network/rpc";
 
 // Components
 import { KpiCard }            from "@profit_dashboard/js/components/KpiCard/KpiCard";
 import { SalesChart }         from "@profit_dashboard/js/components/SalesChart/SalesChart";
 import { TopProductsTable }   from "@profit_dashboard/js/components/TopProductsTable/TopProductsTable";
-import { TopCustomersTable }  from "@profit_dashboard/js/components/TopCustomersTable/TopCustomersTable";
+import { TopCustomersTable }  from "@profit_dashboard/js/components/TopProductsTable/TopCustomersTable";
 import { LowStockAlert }      from "@profit_dashboard/js/components/LowStockAlert/LowStockAlert";
 import { DamageWidget }       from "@profit_dashboard/js/components/DamageWidget/DamageWidget";
 
@@ -34,7 +35,7 @@ export class ProfitDashboard extends Component {
     // -------------------------------------------------------------------------
 
     setup() {
-        this.rpc          = useService("rpc");
+        this.rpc          = rpc;
         this.action       = useService("action");
         this.notification = useService("notification");
 

@@ -10,41 +10,41 @@ class PosConfig(models.Model):
     # -------------------------------------------------------------------------
 
     iface_arabic_search = fields.Boolean(
-        string='Enable Arabic Search / تفعيل البحث بالعربية',
+        string='تفعيل البحث بالعربية',
         default=True,
         help='Allow cashiers to search products by Arabic name, '
              'alias, and keywords.',
     )
     iface_show_stock = fields.Boolean(
-        string='Show Stock in POS / عرض المخزون',
+        string='عرض المخزون في شاشة البيع',
         default=True,
         help='Display available stock quantity on product cards in POS.',
     )
     iface_show_electrical_info = fields.Boolean(
-        string='Show Electrical Info / عرض المعلومات الكهربائية',
+        string='عرض مواصفات المنتج',
         default=True,
         help='Display brand, watt, voltage, and shelf location '
              'on product info popup.',
     )
     iface_packaging_selector = fields.Boolean(
-        string='Enable Packaging Selector / تفعيل اختيار التعبئة',
+        string='تفعيل اختيار التعبئة',
         default=True,
         help='Allow cashiers to select packaging unit '
              '(Piece, Box, Carton, Pack, Meter, Roll) per order line.',
     )
     iface_credit_warning = fields.Boolean(
-        string='Enable Credit Limit Warning / تفعيل تحذير الحد الائتماني',
+        string='تفعيل تحذير الائتمان',
         default=True,
         help='Warn or block cashier when customer exceeds credit limit.',
     )
     iface_show_customer_balance = fields.Boolean(
-        string='Show Customer Balance / عرض رصيد العميل',
+        string='عرض رصيد العميل',
         default=True,
         help='Display outstanding balance and credit status '
              'when a customer is selected in POS.',
     )
     iface_rtl = fields.Boolean(
-        string='RTL Arabic Layout / تخطيط عربي',
+        string='اتجاه عربي من اليمين لليسار',
         default=True,
         help='Enable right-to-left layout for full Arabic UI support.',
     )

@@ -10,85 +10,72 @@
 
     <menuitem
         id="menu_electrical_damage_root"
-        name="Damage &amp; Scrap / الإتلاف والتلف"
+        name="التلف والإتلاف"
         parent="electrical_store_base.menu_electrical_store_root"
         sequence="40"
-        groups="electrical_store_base.group_electrical_storekeeper,
-                electrical_store_base.group_electrical_accountant,
-                electrical_store_base.group_electrical_manager"/>
+        groups="electrical_store_base.group_electrical_storekeeper,electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager"/>
 
          <!-- Scrap Operations -->
 
     <menuitem
         id="menu_electrical_scrap_operations"
-        name="Scrap Operations / عمليات الإتلاف"
+        name="تسجيل تلف"
         parent="menu_electrical_damage_root"
         action="action_stock_scrap_damage"
         sequence="10"
-        groups="electrical_store_base.group_electrical_storekeeper,
-                electrical_store_base.group_electrical_manager"/>
+        groups="electrical_store_base.group_electrical_storekeeper,electrical_store_base.group_electrical_manager"/>
 
          <!-- Damage Analysis — Sub Menu -->
 
     <menuitem
         id="menu_electrical_damage_analysis"
-        name="Damage Analysis / تحليل التلف"
+        name="تقارير التلف"
         parent="menu_electrical_damage_root"
         sequence="20"
-        groups="electrical_store_base.group_electrical_storekeeper,
-                electrical_store_base.group_electrical_accountant,
-                electrical_store_base.group_electrical_manager"/>
+        groups="electrical_store_base.group_electrical_storekeeper,electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager"/>
 
     <!-- By Reason -->
     <menuitem
         id="menu_damage_by_reason"
-        name="By Reason / حسب السبب"
+        name="حسب السبب"
         parent="menu_electrical_damage_analysis"
         action="action_damage_analysis_by_reason"
         sequence="10"
-        groups="electrical_store_base.group_electrical_storekeeper,
-                electrical_store_base.group_electrical_accountant,
-                electrical_store_base.group_electrical_manager"/>
+        groups="electrical_store_base.group_electrical_storekeeper,electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager"/>
 
     <!-- By Product -->
     <menuitem
         id="menu_damage_by_product"
-        name="By Product / حسب المنتج"
+        name="حسب المنتج"
         parent="menu_electrical_damage_analysis"
         action="action_damage_analysis_by_product"
         sequence="20"
-        groups="electrical_store_base.group_electrical_storekeeper,
-                electrical_store_base.group_electrical_accountant,
-                electrical_store_base.group_electrical_manager"/>
+        groups="electrical_store_base.group_electrical_storekeeper,electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager"/>
 
     <!-- Monthly Trend -->
     <menuitem
         id="menu_damage_monthly_trend"
-        name="Monthly Trend / الاتجاه الشهري"
+        name="الاتجاه الشهري"
         parent="menu_electrical_damage_analysis"
         action="action_damage_monthly_trend"
         sequence="30"
-        groups="electrical_store_base.group_electrical_storekeeper,
-                electrical_store_base.group_electrical_accountant,
-                electrical_store_base.group_electrical_manager"/>
+        groups="electrical_store_base.group_electrical_storekeeper,electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager"/>
 
          <!-- PDF Report -->
 
     <menuitem
         id="menu_damage_report_pdf"
-        name="Damage Report PDF / تقرير التلف"
+        name="طباعة تقرير التلف"
         parent="menu_electrical_damage_root"
-        action="report.action_report_damage_summary"
+        action="inventory_damage_management.action_report_damage_summary"
         sequence="30"
-        groups="electrical_store_base.group_electrical_storekeeper,
-                electrical_store_base.group_electrical_accountant,
-                electrical_store_base.group_electrical_manager"/>
+        groups="electrical_store_base.group_electrical_storekeeper,electrical_store_base.group_electrical_accountant,electrical_store_base.group_electrical_manager"/>
 
          <!-- Configuration -->
 
     <menuitem
         id="menu_damage_config"
-        name="Damage Reasons / أسباب التلف"
+        name="أسباب التلف"
         parent="electrical_store_base.menu_electrical_config"
         action="action_damage_reason"
         sequence="50"

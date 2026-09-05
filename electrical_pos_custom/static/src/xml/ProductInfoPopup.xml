@@ -7,6 +7,7 @@
          ================================================================ -->
 
     <t t-name="electrical_pos_custom.ProductInfoPopup">
+        <Dialog title="props.title" footer="false">
         <div class="product-info-popup popup" dir="rtl">
 
             <!-- ============================================================
@@ -233,6 +234,7 @@
             </div>
 
         </div>
+        </Dialog>
     </t>
 
 </templates>

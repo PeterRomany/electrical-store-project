@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Electrical Store Base',
+    'name': 'أساس محل الكهرباء',
     'version': '18.0.1.0.0',
     'category': 'Inventory/Electrical',
     'summary': 'Core product extensions for electrical supplies store (Egypt)',
@@ -47,6 +47,11 @@
         'views/res_partner_views.xml',
         'views/menus.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'electrical_store_base/static/src/css/electrical_store_backend.css',
+        ],
+    },
     'demo': [],
     'installable': True,
     'auto_install': False,

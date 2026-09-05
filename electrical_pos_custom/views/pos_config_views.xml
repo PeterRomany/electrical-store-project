@@ -12,21 +12,19 @@
         <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
         <field name="arch" type="xml">
 
-            <notebook position="inside">
-                <page string="Electrical Store / محل كهرباء"
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                <page string="إعدادات محل الكهرباء"
                       name="electrical_store">
 
                     <!-- Search Settings -->
-                    <group string="Search Settings / إعدادات البحث">
+                    <group string="إعدادات البحث">
                         <group>
                             <field name="iface_arabic_search"/>
                         </group>
                         <group>
                             <div class="text-muted" style="font-size:12px;">
-                                Allow cashiers to search products
-                                using Arabic name, alias, and keywords.
-                                يتيح البحث بالاسم العربي والاسم الشائع
-                                والكلمات المفتاحية.
+                                يتيح للكاشير البحث باسم المنتج أو الاسم الشائع أو الكلمات العربية.
                             </div>
                         </group>
                     </group>
@@ -34,7 +32,7 @@
                     <separator/>
 
                     <!-- Display Settings -->
-                    <group string="Display Settings / إعدادات العرض">
+                    <group string="إعدادات العرض">
                         <group>
                             <field name="iface_show_stock"/>
                             <field name="iface_show_electrical_info"/>
@@ -42,9 +40,7 @@
                         </group>
                         <group>
                             <div class="text-muted" style="font-size:12px;">
-                                Controls what information is shown
-                                on product cards and customer info
-                                in the POS screen.
+                                اختر المعلومات التي تظهر للكاشير في شاشة البيع.
                             </div>
                         </group>
                     </group>
@@ -52,17 +48,15 @@
                     <separator/>
 
                     <!-- Sales Settings -->
-                    <group string="Sales Settings / إعدادات المبيعات">
+                    <group string="إعدادات البيع">
                         <group>
                             <field name="iface_packaging_selector"/>
                             <field name="iface_credit_warning"/>
                         </group>
                         <group>
                             <div class="text-muted" style="font-size:12px;">
-                                Packaging selector lets cashiers choose
-                                Piece, Box, Carton, Pack, Meter, or Roll.
-                                Credit warning alerts cashier when
-                                customer reaches credit limit.
+                                اختيار التعبئة يتيح البيع بالقطعة أو الكرتونة أو المتر أو اللفة.
+                                يظهر تنبيه عند اقتراب العميل من الحد الائتماني.
                             </div>
                         </group>
                     </group>
@@ -70,22 +64,20 @@
                     <separator/>
 
                     <!-- Layout Settings -->
-                    <group string="Layout Settings / إعدادات التخطيط">
+                    <group string="اتجاه الشاشة">
                         <group>
                             <field name="iface_rtl"/>
                         </group>
                         <group>
                             <div class="text-muted" style="font-size:12px;">
-                                Enables right-to-left layout
-                                for full Arabic UI support.
-                                يفعّل تخطيط اليمين إلى اليسار
-                                لدعم كامل للواجهة العربية.
+                                يجعل اتجاه الشاشة من اليمين إلى اليسار.
                             </div>
                         </group>
                     </group>
 
                 </page>
-            </notebook>
+                </notebook>
+            </xpath>
 
         </field>
     </record>

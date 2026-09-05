@@ -11,7 +11,7 @@ class ProductTemplate(models.Model):
 
     brand_id = fields.Many2one(
         comodel_name='electrical.brand',
-        string='Brand / الماركة',
+        string='الماركة',
         index=True,
         tracking=True,
     )
@@ -21,18 +21,18 @@ class ProductTemplate(models.Model):
     # -------------------------------------------------------------------------
 
     watt = fields.Float(
-        string='Watt / الواط',
+        string='الواط',
         digits=(10, 2),
         default=0.0,
         help='Power consumption or output in watts. Example: 9.00, 60.00',
     )
     voltage = fields.Char(
-        string='Voltage / الجهد',
+        string='الجهد',
         size=32,
         help='Operating voltage. Example: 220V, 12V, 12-24V, 110-240V',
     )
     warranty_months = fields.Integer(
-        string='Warranty (Months) / الضمان',
+        string='الضمان (بالشهور)',
         default=0,
         help='Warranty period in months. 0 = no warranty.',
     )
@@ -42,19 +42,19 @@ class ProductTemplate(models.Model):
     # -------------------------------------------------------------------------
 
     shelf_location = fields.Char(
-        string='Shelf Location / موقع الرف',
+        string='موقع الرف',
         size=64,
         index=True,
         help='Physical shelf label inside the store. Example: A3-S2, B1-TOP',
     )
     product_alias = fields.Char(
-        string='Product Alias / الاسم الشائع',
+        string='الاسم الشائع',
         size=128,
         index=True,
         help='Common trade name or shorthand used by staff and customers.',
     )
     arabic_keywords = fields.Text(
-        string='Arabic Search Keywords / كلمات البحث العربية',
+        string='كلمات البحث العربية',
         help='Space-separated Arabic terms used for POS and product search. '
              'Example: لمبة ليد توفير طاقة',
     )

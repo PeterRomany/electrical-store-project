@@ -4,32 +4,32 @@ from odoo import api, fields, models
 
 class ElectricalBrand(models.Model):
     _name = 'electrical.brand'
-    _description = 'Electrical Product Brand'
+    _description = 'ماركة المنتج'
     _order = 'name asc'
     _rec_name = 'name'
 
     name = fields.Char(
-        string='Brand Name',
+        string='اسم الماركة',
         required=True,
         translate=True,
         index=True,
     )
     name_arabic = fields.Char(
-        string='Arabic Name / الاسم بالعربية',
+        string='الاسم بالعربية',
         translate=False,
     )
     country_of_origin = fields.Many2one(
         comodel_name='res.country',
-        string='Country of Origin',
+        string='بلد المنشأ',
     )
     active = fields.Boolean(
         default=True,
     )
     notes = fields.Text(
-        string='Notes',
+        string='ملاحظات',
     )
     product_count = fields.Integer(
-        string='Products',
+        string='المنتجات',
         compute='_compute_product_count',
         store=False,
     )

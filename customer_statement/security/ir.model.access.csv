@@ -1,5 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
-<!-- customer.statement.wizard -->
 access_customer_statement_wizard_accountant,customer.statement.wizard accountant,model_customer_statement_wizard,electrical_store_base.group_electrical_accountant,1,1,1,1
 access_customer_statement_wizard_manager,customer.statement.wizard manager,model_customer_statement_wizard,electrical_store_base.group_electrical_manager,1,1,1,1

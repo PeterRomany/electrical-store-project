@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Customer Statement',
+    'name': 'كشف حساب العملاء',
     'version': '18.0.1.0.0',
     'category': 'Accounting/Reports',
     'summary': 'Customer account statement with outstanding balance and PDF export',
@@ -35,6 +35,7 @@
         'electrical_store_base',
         'customer_credit_limit',
         'account',
+        'accounting_pdf_reports',
         'mail',
     ],
     'data': [

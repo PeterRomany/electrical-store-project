@@ -37,8 +37,7 @@
                                 type="object"
                                 class="oe_stat_button"
                                 icon="fa-cube"
-                                groups="electrical_store_base.group_electrical_storekeeper,
-                                        electrical_store_base.group_electrical_manager">
+                                groups="electrical_store_base.group_electrical_storekeeper,electrical_store_base.group_electrical_manager">
                             <field name="product_count"
                                    widget="statinfo"
                                    string="Products"/>
@@ -49,7 +48,7 @@
                     <widget name="web_ribbon"
                             title="Archived"
                             bg_color="text-bg-danger"
-                            attrs="{'invisible': [('active', '=', True)]}"/>
+                            invisible="active"/>
 
                     <field name="active" invisible="1"/>
 

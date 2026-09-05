@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Customer Credit Limit',
+    'name': 'ائتمان العملاء',
     'version': '18.0.1.0.0',
     'category': 'Sales/Credit',
     'summary': 'Credit limit, warning threshold, and blocking for customers',

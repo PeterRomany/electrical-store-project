@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ماركات -->
+        <record id="demo_brand_philips" model="electrical.brand">
+            <field name="name">Philips</field>
+            <field name="name_arabic">فيليبس</field>
+            <field name="country_of_origin" ref="base.nl"/>
+        </record>
+        <record id="demo_brand_osram" model="electrical.brand">
+            <field name="name">OSRAM</field>
+            <field name="name_arabic">أوسرام</field>
+            <field name="country_of_origin" ref="base.de"/>
+        </record>
+        <record id="demo_brand_schneider" model="electrical.brand">
+            <field name="name">Schneider</field>
+            <field name="name_arabic">شنايدر</field>
+            <field name="country_of_origin" ref="base.fr"/>
+        </record>
+
+        <!-- أقسام شاشة البيع -->
+        <record id="demo_pos_category_lighting" model="pos.category">
+            <field name="name">إضاءة</field>
+            <field name="color">3</field>
+        </record>
+        <record id="demo_pos_category_wires" model="pos.category">
+            <field name="name">أسلاك وكابلات</field>
+            <field name="color">5</field>
+        </record>
+        <record id="demo_pos_category_switches" model="pos.category">
+            <field name="name">مفاتيح وقواطع</field>
+            <field name="color">7</field>
+        </record>
+
+        <!-- منتجات جاهزة للتجربة -->
+        <record id="demo_product_led_9w" model="product.template">
+            <field name="name">لمبة ليد 9 وات</field>
+            <field name="default_code">LED-009</field>
+            <field name="barcode">6229000000091</field>
+            <field name="categ_id" ref="electrical_store_base.product_category_lamps"/>
+            <field name="list_price">45.00</field>
+            <field name="standard_price">28.00</field>
+            <field name="type">consu</field>
+            <field name="available_in_pos">True</field>
+            <field name="pos_categ_ids" eval="[(6, 0, [ref('electrical_store_demo.demo_pos_category_lighting')])]"/>
+            <field name="brand_id" ref="demo_brand_philips"/>
+            <field name="watt">9</field>
+            <field name="voltage">220 فولت</field>
+            <field name="warranty_months">24</field>
+            <field name="shelf_location">رف A1</field>
+            <field name="product_alias">لمبة ليد توفير</field>
+            <field name="arabic_keywords">لمبة ليد لمبة توفير نور أبيض</field>
+        </record>
+        <record id="demo_product_led_12w" model="product.template">
+            <field name="name">لمبة ليد 12 وات</field>
+            <field name="default_code">LED-012</field>
+            <field name="barcode">6229000000121</field>
+            <field name="categ_id" ref="electrical_store_base.product_category_lamps"/>
+            <field name="list_price">60.00</field>
+            <field name="standard_price">38.00</field>
+            <field name="type">consu</field>
+            <field name="available_in_pos">True</field>
+            <field name="pos_categ_ids" eval="[(6, 0, [ref('electrical_store_demo.demo_pos_category_lighting')])]"/>
+            <field name="brand_id" ref="demo_brand_osram"/>
+            <field name="watt">12</field>
+            <field name="voltage">220 فولت</field>
+            <field name="warranty_months">24</field>
+            <field name="shelf_location">رف A1</field>
+            <field name="product_alias">لمبة كبيرة</field>
+            <field name="arabic_keywords">لمبة ليد إنارة أبيض توفير</field>
+        </record>
+        <record id="demo_product_wire_2mm" model="product.template">
+            <field name="name">سلك كهرباء 2 مم</field>
+            <field name="default_code">WIRE-2MM</field>
+            <field name="barcode">6229000000206</field>
+            <field name="categ_id" ref="electrical_store_base.product_category_wires"/>
+            <field name="list_price">18.00</field>
+            <field name="standard_price">12.00</field>
+            <field name="type">consu</field>
+            <field name="available_in_pos">True</field>
+            <field name="pos_categ_ids" eval="[(6, 0, [ref('electrical_store_demo.demo_pos_category_wires')])]"/>
+            <field name="brand_id" ref="demo_brand_schneider"/>
+            <field name="voltage">450 فولت</field>
+            <field name="shelf_location">رف B2</field>
+            <field name="product_alias">سلك 2 ملي</field>
+            <field name="arabic_keywords">سلك كهرباء كابل 2 ملي متر</field>
+        </record>
+        <record id="demo_product_switch" model="product.template">
+            <field name="name">مفتاح مفرد أبيض</field>
+            <field name="default_code">SW-001</field>
+            <field name="barcode">6229000000305</field>
+            <field name="categ_id" ref="electrical_store_base.product_category_switches"/>
+            <field name="list_price">35.00</field>
+            <field name="standard_price">20.00</field>
+            <field name="type">consu</field>
+            <field name="available_in_pos">True</field>
+            <field name="pos_categ_ids" eval="[(6, 0, [ref('electrical_store_demo.demo_pos_category_switches')])]"/>
+            <field name="brand_id" ref="demo_brand_schneider"/>
+            <field name="voltage">220 فولت</field>
+            <field name="shelf_location">رف C1</field>
+            <field name="product_alias">مفتاح نور</field>
+            <field name="arabic_keywords">مفتاح كهرباء مفتاح نور مفرد</field>
+        </record>
+        <record id="demo_product_breaker" model="product.template">
+            <field name="name">قاطع أوتوماتيك 20 أمبير</field>
+            <field name="default_code">BR-020</field>
+            <field name="barcode">6229000000404</field>
+            <field name="categ_id" ref="electrical_store_base.product_category_breakers"/>
+            <field name="list_price">120.00</field>
+            <field name="standard_price">82.00</field>
+            <field name="type">consu</field>
+            <field name="available_in_pos">True</field>
+            <field name="pos_categ_ids" eval="[(6, 0, [ref('electrical_store_demo.demo_pos_category_switches')])]"/>
+            <field name="brand_id" ref="demo_brand_schneider"/>
+            <field name="voltage">220 فولت</field>
+            <field name="shelf_location">رف C2</field>
+            <field name="product_alias">قاطع 20 أمبير</field>
+            <field name="arabic_keywords">قاطع كهرباء أوتوماتيك أمبير</field>
+        </record>
+
+        <!-- وحدات تعبئة -->
+        <record id="demo_pack_led_box" model="product.packaging">
+            <field name="name">كرتونة لمبات</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('electrical_store_demo.demo_product_led_9w'))]"/>
+            <field name="qty">12</field>
+            <field name="packaging_type">box</field>
+            <field name="arabic_name">كرتونة (12 قطعة)</field>
+        </record>
+        <record id="demo_pack_wire_roll" model="product.packaging">
+            <field name="name">لفة سلك</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('electrical_store_demo.demo_product_wire_2mm'))]"/>
+            <field name="qty">100</field>
+            <field name="packaging_type">roll</field>
+            <field name="arabic_name">لفة (100 متر)</field>
+        </record>
+
+        <!-- عملاء -->
+        <record id="demo_customer_retail" model="res.partner">
+            <field name="name">أحمد محمد - نقدي</field>
+            <field name="company_type">person</field>
+            <field name="customer_rank">1</field>
+            <field name="customer_type">retail</field>
+            <field name="phone">01000000001</field>
+            <field name="city">القاهرة</field>
+        </record>
+        <record id="demo_customer_electrician" model="res.partner">
+            <field name="name">محمود الكهربائي</field>
+            <field name="company_type">person</field>
+            <field name="customer_rank">1</field>
+            <field name="customer_type">electrician</field>
+            <field name="phone">01000000002</field>
+            <field name="credit_limit">3000</field>
+            <field name="warning_threshold">80</field>
+            <field name="blocking_threshold">100</field>
+            <field name="city">الجيزة</field>
+        </record>
+        <record id="demo_customer_contractor" model="res.partner">
+            <field name="name">شركة النور للمقاولات</field>
+            <field name="company_type">company</field>
+            <field name="customer_rank">1</field>
+            <field name="customer_type">company</field>
+            <field name="phone">01000000003</field>
+            <field name="credit_limit">10000</field>
+            <field name="warning_threshold">75</field>
+            <field name="blocking_threshold">100</field>
+            <field name="city">مدينة نصر</field>
+        </record>
+        <record id="demo_supplier_electrical" model="res.partner">
+            <field name="name">مورد الكهرباء للتجارة</field>
+            <field name="company_type">company</field>
+            <field name="supplier_rank">1</field>
+            <field name="phone">01000000004</field>
+            <field name="city">العتبة</field>
+        </record>
+
+        <!-- طلبات مؤكدة لتجربة لوحة المتابعة -->
+        <record id="demo_sale_order_today" model="sale.order">
+            <field name="partner_id" ref="demo_customer_retail"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="date_order" eval="DateTime.now()"/>
+        </record>
+        <record id="demo_sale_order_today_line_1" model="sale.order.line">
+            <field name="order_id" ref="demo_sale_order_today"/>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('electrical_store_demo.demo_product_led_9w'))]"/>
+            <field name="product_uom" ref="uom.product_uom_unit"/>
+            <field name="product_uom_qty">3</field>
+            <field name="price_unit">45.00</field>
+        </record>
+        <record id="demo_sale_order_today_line_2" model="sale.order.line">
+            <field name="order_id" ref="demo_sale_order_today"/>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('electrical_store_demo.demo_product_switch'))]"/>
+            <field name="product_uom" ref="uom.product_uom_unit"/>
+            <field name="product_uom_qty">2</field>
+            <field name="price_unit">35.00</field>
+        </record>
+
+        <record id="demo_sale_order_yesterday" model="sale.order">
+            <field name="partner_id" ref="demo_customer_electrician"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="date_order" eval="DateTime.now() - relativedelta(days=1)"/>
+        </record>
+        <record id="demo_sale_order_yesterday_line_1" model="sale.order.line">
+            <field name="order_id" ref="demo_sale_order_yesterday"/>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('electrical_store_demo.demo_product_wire_2mm'))]"/>
+            <field name="product_uom" ref="uom.product_uom_unit"/>
+            <field name="product_uom_qty">10</field>
+            <field name="price_unit">18.00</field>
+        </record>
+
+        <function model="sale.order" name="action_confirm" eval="[[ref('electrical_store_demo.demo_sale_order_today'), ref('electrical_store_demo.demo_sale_order_yesterday')]]"/>
+
+    </data>
+</odoo>

@@ -1,9 +1,9 @@
 /** @odoo-module **/
 
 import { Component, useState, onWillStart } from "@odoo/owl";
+import { Dialog } from "@web/core/dialog/dialog";
 import { useService } from "@web/core/utils/hooks";
 import { usePos } from "@point_of_sale/app/store/pos_hook";
-import { AbstractAwaitablePopup } from "@point_of_sale/app/popup/abstract_awaitable_popup";
 
 // =============================================================================
 // PackagingSelectorPopup Component
@@ -12,17 +12,19 @@ import { AbstractAwaitablePopup } from "@point_of_sale/app/popup/abstract_awaita
 // Automatically converts quantity to base UoM for inventory accuracy
 // =============================================================================
 
-export class PackagingSelectorPopup extends AbstractAwaitablePopup {
+export class PackagingSelectorPopup extends Component {
     static template = "electrical_pos_custom.PackagingSelectorPopup";
+    static components = { Dialog };
 
     static props = {
-        ...AbstractAwaitablePopup.props,
         product:       { type: Object },
         defaultQty:    { type: Number, optional: true },
+        title:         { type: String, optional: true },
+        getPayload:    { type: Function },
+        close:         { type: Function },
     };
 
     static defaultProps = {
-        ...AbstractAwaitablePopup.defaultProps,
         title:      'اختر وحدة التعبئة',
         defaultQty: 1,
     };
@@ -32,7 +34,6 @@ export class PackagingSelectorPopup extends AbstractAwaitablePopup {
     // -------------------------------------------------------------------------
 
     setup() {
-        super.setup();
         this.pos          = usePos();
         this.orm          = useService("orm");
         this.notification = useService("notification");
@@ -249,19 +250,21 @@ export class PackagingSelectorPopup extends AbstractAwaitablePopup {
     confirm() {
         if (!this.canConfirm) return;
 
-        this.props.close({
+        this.props.getPayload({
             confirmed:         true,
             packaging:         this.state.selectedPackaging,
             qty:               this.state.qty,
             baseQty:           this.baseQty,
             product:           this.props.product,
         });
+        this.props.close();
     }
 
     /**
      * Cancel — no selection made.
      */
     cancel() {
-        this.props.close({ confirmed: false });
+        this.props.getPayload({ confirmed: false });
+        this.props.close();
     }
 }

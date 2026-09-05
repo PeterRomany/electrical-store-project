@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { useService } from "@web/core/utils/hooks";
+import { rpc } from "@web/core/network/rpc";
 
 // =============================================================================
 // Profit Dashboard Service
@@ -16,7 +16,7 @@ export class ProfitDashboardService {
 
     constructor(env, services) {
         this.env    = env;
-        this.rpc    = services.rpc;
+        this.rpc    = rpc;
         this.orm    = services.orm;
         this.user   = services.user;
 
@@ -257,7 +257,7 @@ export class ProfitDashboardService {
 // -------------------------------------------------------------------------
 
 registry.category('services').add('profit_dashboard', {
-    dependencies: ['rpc', 'orm', 'user'],
+    dependencies: ['orm'],
     start(env, services) {
         return new ProfitDashboardService(env, services);
     },

@@ -5,6 +5,8 @@ import { PaymentScreen } from "@point_of_sale/app/screens/payment_screen/payment
 import { useService } from "@web/core/utils/hooks";
 import { usePos } from "@point_of_sale/app/store/pos_hook";
 import { useState } from "@odoo/owl";
+import { ask, makeAwaitable } from "@point_of_sale/app/store/make_awaitable_dialog";
+import { NumberPopup } from "@point_of_sale/app/utils/input_popups/number_popup";
 
 // =============================================================================
 // PaymentScreen Patch
@@ -25,7 +27,7 @@ patch(PaymentScreen.prototype, {
         super.setup();
 
         this.pos          = usePos();
-        this.popup        = useService("popup");
+        this.dialog       = useService("dialog");
         this.orm          = useService("orm");
         this.notification = useService("notification");
 
@@ -148,11 +150,11 @@ patch(PaymentScreen.prototype, {
      * @param {object} result — {status, message, allowed}
      */
     async _showCreditWarning(partner, result) {
-        await this.popup.add('ConfirmPopup', {
+        await ask(this.dialog, {
             title:         '⚠️ تحذير ائتماني',
             body:          result.message || `العميل ${partner.name} قارب على الحد الائتماني.`,
-            confirmText:   'متابعة الدفع',
-            cancelText:    'مراجعة الطلب',
+            confirmLabel:  'متابعة الدفع',
+            cancelLabel:   'مراجعة الطلب',
         });
     },
 
@@ -177,14 +179,14 @@ patch(PaymentScreen.prototype, {
         );
 
         // Ask if manager wants to override
-        const { confirmed } = await this.popup.add('ConfirmPopup', {
+        const confirmed = await ask(this.dialog, {
             title: '🚫 حساب محظور — تجاوز الحد الائتماني',
             body:
                 `العميل: ${partner.name}\n` +
                 `${result.message}\n\n` +
                 `هل تريد طلب تجاوز من المدير؟`,
-            confirmText: 'طلب تجاوز المدير',
-            cancelText:  'إلغاء العملية',
+            confirmLabel: 'طلب تجاوز المدير',
+            cancelLabel:  'إلغاء العملية',
         });
 
         if (!confirmed) {
@@ -210,22 +212,18 @@ patch(PaymentScreen.prototype, {
     async _requestManagerOverride(partner, result) {
         try {
             // Use standard Odoo POS manager access check
-            const { confirmed, payload } = await this.popup.add(
-                'NumberPopup',
-                {
-                    title:       'أدخل رقم PIN المدير',
-                    startingValue: '',
-                    isPassword:  true,
-                }
-            );
+            const pin = await makeAwaitable(this.dialog, NumberPopup, {
+                title:         'أدخل رقم PIN المدير',
+                startingValue: '',
+            });
 
-            if (!confirmed || !payload) return false;
+            if (!pin) return false;
 
             // Verify manager PIN via RPC
             const isValid = await this.orm.call(
                 'res.users',
                 'check_pos_manager_pin',
-                [payload],
+                [pin],
                 {}
             );
 

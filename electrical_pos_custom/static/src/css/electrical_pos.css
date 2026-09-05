@@ -414,3 +414,28 @@
     gap: 10px;
     justify-content: center;
 }
+
+/* أزرار ومساحات أكبر لتسهيل الاستخدام */
+.pos .btn-lg,
+.pos .btn.btn-lg {
+    min-height: 48px;
+    font-size: 17px;
+}
+
+.pos .form-control,
+.pos input {
+    min-height: 42px;
+    font-size: 16px;
+}
+
+.pos .product-screen .product-list {
+    gap: 10px;
+}
+
+.electrical-product-card .product-name {
+    font-size: 16px !important;
+}
+
+.electrical-product-card .product-price {
+    font-size: 17px !important;
+}

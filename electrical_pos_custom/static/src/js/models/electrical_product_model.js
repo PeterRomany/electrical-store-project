@@ -1,14 +1,14 @@
 /** @odoo-module **/
 
 import { patch } from "@web/core/utils/patch";
-import { Product } from "@point_of_sale/app/store/models";
+import { ProductProduct } from "@point_of_sale/app/models/product_product";
 
 // =============================================================================
 // Patch Product Model
 // Extend standard POS Product with electrical store fields
 // =============================================================================
 
-patch(Product.prototype, {
+patch(ProductProduct.prototype, {
 
     // -------------------------------------------------------------------------
     // Electrical Field Getters

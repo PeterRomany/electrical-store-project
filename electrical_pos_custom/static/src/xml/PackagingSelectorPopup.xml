@@ -7,6 +7,7 @@
          ================================================================ -->
 
     <t t-name="electrical_pos_custom.PackagingSelectorPopup">
+        <Dialog title="props.title" footer="false">
         <div class="packaging-selector-popup popup" dir="rtl">
 
             <!-- ============================================================
@@ -230,6 +231,7 @@
             </div>
 
         </div>
+        </Dialog>
     </t>
 
 </templates>

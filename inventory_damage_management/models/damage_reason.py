@@ -4,7 +4,7 @@ from odoo import api, fields, models
 
 class DamageReason(models.Model):
     _name        = 'damage.reason'
-    _description = 'Damage Reason / سبب التلف'
+    _description = 'سبب التلف'
     _order       = 'sequence asc, name asc'
     _rec_name    = 'name'
 
@@ -13,23 +13,23 @@ class DamageReason(models.Model):
     # -------------------------------------------------------------------------
 
     name = fields.Char(
-        string='Reason / السبب',
+        string='السبب',
         required=True,
         translate=True,
         index=True,
     )
     name_arabic = fields.Char(
-        string='Arabic Name / الاسم بالعربية',
+        string='الاسم بالعربية',
         size=128,
     )
     code = fields.Char(
-        string='Code / الكود',
+        string='الكود',
         size=16,
         index=True,
         help='Short reference code for reporting. Example: PHY, WAT, ELC',
     )
     sequence = fields.Integer(
-        string='Sequence',
+        string='الترتيب',
         default=10,
         help='Display order in lists and reports.',
     )
@@ -37,22 +37,22 @@ class DamageReason(models.Model):
         default=True,
     )
     color = fields.Integer(
-        string='Color Index',
+        string='اللون',
         default=0,
         help='Color used in kanban and reports.',
     )
     notes = fields.Text(
-        string='Description / الوصف',
+        string='الوصف',
         translate=True,
         help='Detailed description of this damage reason.',
     )
     scrap_count = fields.Integer(
-        string='Scrap Operations',
+        string='عمليات الإتلاف',
         compute='_compute_scrap_count',
         store=False,
     )
     scrap_value = fields.Float(
-        string='Total Damage Value',
+        string='إجمالي قيمة التلف',
         compute='_compute_scrap_count',
         store=False,
         digits=(16, 2),

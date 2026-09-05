@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- شاشة البيع: أسماء عربية وبطاقات منتجات واضحة -->
+    <t t-inherit="point_of_sale.Navbar" t-inherit-mode="extension">
+        <xpath expr="//Input[@placeholder.translate='Search products...']" position="attributes">
+            <attribute name="placeholder.translate">ابحث عن المنتج أو الباركود</attribute>
+        </xpath>
+        <xpath expr="//DropdownItem[normalize-space()='Orders']" position="replace">
+            <DropdownItem onSelected="() => this.pos.showScreen('TicketScreen')">
+                الطلبات <span t-if="orderCount gt 0" class="badge text-bg-info rounded-pill py-1 ms-2 float-end" t-esc="orderCount"/>
+            </DropdownItem>
+        </xpath>
+        <xpath expr="//DropdownItem[normalize-space()='Cash In/Out']" position="replace">
+            <DropdownItem t-if="showCashMoveButton" onSelected="() => this.pos.cashMove()">
+                حركة النقدية
+            </DropdownItem>
+        </xpath>
+        <xpath expr="//DropdownItem[normalize-space()='Close Register']" position="replace">
+            <DropdownItem onSelected="() => this.pos.closeSession()">
+                إغلاق الوردية
+            </DropdownItem>
+        </xpath>
+    </t>
+
+    <t t-inherit="point_of_sale.ProductScreen" t-inherit-mode="extension">
+        <xpath expr="//ProductCard" position="replace">
+            <ElectricalProductCard
+                t-foreach="productsToDisplay" t-as="product" t-key="product.id"
+                product="product"
+                onClick.bind="() => this.onProductCardClick(product)"
+                onInfoClick.bind="() => this.onProductInfoClick(product)"
+                onPackClick.bind="() => this.onProductPackClick(product)"
+                showStock="showStockEnabled"
+                showElecInfo="showElecInfoEnabled"
+                showPackaging="packagingEnabled"/>
+        </xpath>
+        <xpath expr="//span[normalize-space()='Pay']" position="replace">
+            <span class="d-block">دفع</span>
+        </xpath>
+        <xpath expr="//span[normalize-space()='Cart']" position="replace">
+            <span class="d-block">الفاتورة</span>
+        </xpath>
+        <xpath expr="//span[normalize-space()='Products']" position="replace">
+            <span class="d-block">المنتجات</span>
+        </xpath>
+        <xpath expr="//div[contains(@class, 'search-more-button')]/button" position="replace">
+            <button class="btn btn-primary btn-lg lh-lg" t-on-click="onPressEnterKey">
+                بحث إضافي
+            </button>
+        </xpath>
+    </t>
+
+</templates>
